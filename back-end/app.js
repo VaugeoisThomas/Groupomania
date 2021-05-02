@@ -1,14 +1,13 @@
-const mysql = require('mysql');
 const express = require('express');
-require('dotenv').config()
+const bodyparser = require('body-parser');
+const helmet = require('helmet');
 const app = express();
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_TABLE
-});
+const users = require('./routes/usersRouter');
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: false}));
+app.use(helmet());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,9 +16,6 @@ app.use((req, res, next) => {
     next();
 });
 
-db.connect(function(err){
-    if(err) throw err;
-    console.log('Connection réussie')
-});
+app.use("/api/users", users);
 
 module.exports = app;

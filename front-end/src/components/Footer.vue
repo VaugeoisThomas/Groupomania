@@ -16,13 +16,33 @@ export default {
 </template>
 
 <style scoped>
+
 footer {
-  height: auto;
+  margin-top: 2vh;
+  height: 7vh;
   width: 100%;
 }
 nav {
-  background-color: rgb(17, 37, 65);
+  background-color: rgb(30, 30, 30);
   color: #fff;
-  padding: 15px;
+  height: 100%;
+}
+
+ul{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li {
+    list-style: none;
+}
+
+li a{
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 5px 20px;
 }
 </style>
