@@ -32,3 +32,35 @@ exports.createUser = (req, res, next) => {
         } else res.status(404).json({message: "Renseignez votre email"});
     } else res.status(401).json({message: "Votre mot de passe est invalide"});
 };
+
+exports.login = (req, res, next) => {
+
+};
+
+exports.selectAllUsers = (req, res, next) => {
+
+}
+
+exports.selectOneUser = (req, res, next) => {
+    
+}
+
+exports.deleteOneUser = (req, res, next) => {
+    
+}
+
+exports.updateUserName = (req, res, next) => {
+    
+}
+
+exports.updateUsersEmail = (req, res, next) => {
+    
+}
+
+exports.updateUsersAge = (req, res, next) => {
+    
+}
+
+exports.updateUsersBiography = (req, res, next) => {
+    
+}
