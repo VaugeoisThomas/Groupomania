@@ -17,14 +17,14 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input v-model="datas.email" type="email" class="form-control" id="email" name="email" placeholder="Adresse email" required>
+                                    <input v-model="formDatas.email" type="email" class="form-control" id="email" name="email" placeholder="Adresse email" required>
                                     <div class="error">Merci de saisir un email valide</div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input v-model="datas.password" type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
+                                    <input v-model="formDatas.password" type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
                                     <div class="error">Votre mot de passe doit contenir minimum 8 caractères dont une majuscule et un chiffre</div>
                                 </div>
                             </div>
@@ -45,9 +45,9 @@ export default {
     name: "Register",
     data(){
         return {
-            datas : {
-                email: '',
-                password: '',
+            formDatas : {
+                email: null,
+                password: null,
             },
             error: "",
             success: ""
@@ -55,26 +55,29 @@ export default {
     },
     methods: {
         registration(){
-            const formData = new FormData();
-            formData.append("email", this.datas.email);
-            formData.append("password", this.datas.password);
+            var that = this;
+            const datas = new FormData();
+            datas.append("email", this.formDatas.email);
+            datas.append("password", this.formDatas.password);
 
             let validation = document.querySelector('#form-validation');
             if(validation.checkValidity(event) === false){
                 event.preventDefault();
                 event.stopPropagation();
             }else{
-                axios.post("http://localhost:3000/api/users", formData)
-                    .then(response => {
-                        this.error = "";
-                        this.success = "Inscription réussie";
-                        response.headers = { Authorization: "Bearer " + response.data.token};
-                        setTimeout(() => {
+                axios.post("http://localhost:3000/api/users", datas)
+                    .then(function(response) {
+                        that.error = "";
+                        that.success = "Inscription réussie";
+                        response.headers = { 
+                            Authorization: "Bearer " + response.data.token
+                            };
+                        setTimeout(function(){
                             window.location.href = "/profil";
                         }, 2000)
                     })
-                    .catch(() => {
-                        this.error = "L'email est déjà utilisé";
+                    .catch(function(){
+                        that.error = "L'email est déjà utilisé";
                     });
             }
         }
@@ -98,5 +101,12 @@ export default {
 .card-title{
     text-align: center;
     
+}
+
+input:invalid{
+    border: 2px solid red;
+}
+input:valid{
+    border: 2px solid green;
 }
 </style>

@@ -6,19 +6,19 @@
                     <h1 class="card-title text-uppercase">Connexion</h1>
                 </div>
                 <div class="card-body">
-                    <form method="post" id="form-validation" enctype="multipart/form-data" novalidate>
+                    <form @submit="login" method="post" id="form-validation" enctype="multipart/form-data" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Adresse email" required>
+                                    <input v-model="user_email" type="email" class="form-control" id="email" name="email" placeholder="Adresse email" required>
                                     <div class="error">Merci de saisir un email valide</div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="password">Password</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
+                                    <input v-model="user_password" type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
                                     <div class="error">Votre mot de passe doit contenir minimum 8 caractères dont une majuscule et un chiffre</div>
                                 </div>
                             </div>
@@ -34,6 +34,39 @@
         </div>
     </main>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+    name: "Login",
+    data(){
+        return {
+            user_email: null,
+            user_password: null
+        };
+    },
+    methods: {
+        login(event){
+            event.preventDefault();
+            let form = document.querySelector("#form-validation");
+            if(form.checkValidity(event) === false){
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                axios.post("http://localhost:3000/api/users/login", {users_email: this.user_email, users_password: this.user_password})
+                    .then((response) => {
+                        response.headers = {
+                            Authorization: "Bearer " + response.data.token,
+                        };
+                        window.location.href = "/"
+                    })
+                    .catch("Utilisateur non reconnu");
+            }
+        }  
+    }
+};
+</script>
 
 <style scoped>
 

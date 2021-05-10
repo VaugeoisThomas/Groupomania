@@ -12,3 +12,5 @@ bdd.connect((err) => {
     if(err) console.log(err.message);
     else console.log("Connection réussie")
 });
+
+module.exports = bdd;
