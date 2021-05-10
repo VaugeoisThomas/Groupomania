@@ -6,7 +6,7 @@
                     <h1 class="card-title text-uppercase">Connexion</h1>
                 </div>
                 <div class="card-body">
-                    <form @submit="login" method="post" id="form-validation" enctype="multipart/form-data" novalidate>
+                    <form @submit="login" method="post" id="form-validation" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
