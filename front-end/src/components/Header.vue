@@ -1,6 +1,22 @@
 <script>
 export default {
     name: 'Header',
+    data(){
+        return {
+            authenticate: "",
+        };
+    },
+    methods: {
+        logout() {
+            localStorage.clear();
+            window.location.href = "/";
+        },
+    },
+    mounted() {
+        if(localStorage.jwt) {
+            this.authenticate = localStorage.jwt;
+        }
+    }
 }
 </script>
 
@@ -21,7 +37,7 @@ export default {
                 <li v-else>
                     <router-link to="/login" exact>Connexion</router-link>
                 </li>
-                <li v-if="authenticate">
+                <li v-if="authenticate" @click="logout">
                     <router-link to="/login" exact>Déconnexion</router-link>
                 </li>
                 <li v-else>

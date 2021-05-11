@@ -56,10 +56,12 @@ export default {
             } else {
                 axios.post("http://localhost:3000/api/users/login", {users_email: this.user_email, users_password: this.user_password})
                     .then((response) => {
+                        localStorage.setItem("jwt", response.data.token);
+                        localStorage.setItem("userId", response.data.userId);
                         response.headers = {
                             Authorization: "Bearer " + response.data.token,
                         };
-                        window.location.href = "/"
+                        window.location.href = "/profil"
                     })
                     .catch("Utilisateur non reconnu");
             }
