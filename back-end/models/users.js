@@ -30,8 +30,6 @@ exports.createUserProfil = () => {
     return `UPDATE users
             SET 
                 users_name = ?,
-                users_password = ?,
-                users_email = ?,
                 users_age = ?,
                 users_biography = ? 
             WHERE users_id = ?`;
