@@ -61,7 +61,7 @@ export default {
                         response.headers = {
                             Authorization: "Bearer " + response.data.token,
                         };
-                        window.location.href = "/profil"
+                        window.location.href = "/forum"
                     })
                     .catch("Utilisateur non reconnu");
             }

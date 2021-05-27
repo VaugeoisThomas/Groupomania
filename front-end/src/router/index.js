@@ -20,6 +20,11 @@ const routes = [
     path:'/profil',
     name:'Profil',
     component: () => import(/* webpackChunkName: "profil" */ '../views/Profil.vue')
+  },
+  {
+    path:'/forum',
+    name:'Forum',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/Forum.vue')
   }
 ]
 
