@@ -7,7 +7,7 @@
 <script>
 
 export default {
-    name: "Forum",
+    name: "Forum"
 }
 </script>
 
