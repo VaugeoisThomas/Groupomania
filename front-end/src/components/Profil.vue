@@ -33,11 +33,16 @@
                     </form>     
                 </div>
                 <div v-else class="card-body">
-                    <h1 class="card-title text-uppercase">Informations</h1>
+                    <div class="card-title text-uppercase">Informations</div>
                     <p class="card-text">Votre pseudo: {{ profil.users_name }}</p>
                     <p class="card-text">Votre adresse email: {{ profil.users_email }}</p>
                     <p class="card-text">Votre age: {{ profil.users_age }}</p>
                     <p class="card-text">Votre biographie: {{ profil.users_biography }}</p>
+                </div>
+                <div class="card-footer">
+                    <h1>Options</h1>
+                    <button class="btn btn-danger" type="button" id="suppression" value="suppression" @click="deletionProfil()">Supprimer votre compte</button>
+                    <button class="btn btn-success" type="button" id="modification" value="modification" @click="profilModification()">Modifier votre profil</button>
                 </div>
             </div>
         </div>
@@ -87,8 +92,6 @@ export default {
             }else{
                 axios.put("http://localhost:3000/api/users/" + this.userId + "/profil", {users_name: this.user_name, users_age: this.user_age, users_biography: this.user_biography })
                     .then((response) => {
-                        localStorage.setItem("jwt", response.data.token);
-                        localStorage.setItem("userId", response.data.userId);
                         response.headers = { 
                             Authorization: "Bearer " + response.data.token
                         };
@@ -98,6 +101,19 @@ export default {
                         that.error = "L'email est déjà utilisé";
                     });
             }
+        },
+        deletionProfil(){
+            const configuration = {
+                headers: { Authorization: 'Bearer ' + this.token },
+            }
+            axios.delete("http://localhost:3000/api/users/" + this.userId, configuration)
+                .then(() => {
+                    localStorage.clear();
+                    window.location.href = "/";
+                })
+                .catch(() => {
+                    alert('Vous n\'avez pas les droits de supprimer ce profil !')
+                })
         }
     }
 }

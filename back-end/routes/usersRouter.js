@@ -8,9 +8,9 @@ router.get('/', users.selectAllUsers);
 router.post('/login', users.login);
 router.get('/:id', users.selectOneUser);
 router.put('/:id/profil', users.createUserProfil);
+router.delete('/:id', auth, users.deleteOneUser);
+/*router.put('/:id', auth, users.modifyOneUser);
 
-/*router.delete('/:id', auth, users.deleteOneUser);
-router.put('/:id', auth, users.modifyOneUser);
 
 router.put('/:id/updateUserName', auth, users.updateUserName);
 router.put('/:id/updateUsersEmail', auth, users.updateUsersEmail);
