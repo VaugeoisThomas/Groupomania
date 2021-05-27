@@ -130,8 +130,7 @@ exports.selectOneUser = (req, res) => {
 };
 
 exports.deleteOneUser = (req, res) => {
-    console.log("1");
-    /*bdd.query(Users.selectUsersById(), [req.params.id], (err, result) => {
+    bdd.query(Users.selectUsersById(), [req.params.id], (err, result) => {
         if(err) {
             throw err;
         } else {
@@ -157,7 +156,7 @@ exports.deleteOneUser = (req, res) => {
                 });
             }
         }
-    })*/
+    })
 };
 
 exports.updateUserName = () => {
