@@ -52,14 +52,10 @@ exports.createUser = (req, res) => {
                 }
             })
         } else {
-            res.status(404).json({
-                message: "Veuillez saisir votre adresse Email !"
-            })
+            return res.status(404).json({message: "Veuillez saisir votre adresse Email !"})
         }
     } else {
-        res.status(404).json({
-            message: "Votre mot de passe n'est pas valide !",
-        })
+        return res.status(404).json({message: "Votre mot de passe n'est pas valide !"})
     }
 };
 
@@ -70,25 +66,22 @@ exports.login = (req, res) => {
                 throw error;
             } else {
                 if (!result[0] || !bcrypt.compare(req.body.users_password, result[0].users_password)) {
-                    res.status(401).json({
-                        message: "Mot de passe incorrect",
-                    })
+                    return res.status(401).json({ message: "Mot de passe incorrect" })
                 } else {
-                    res.status(200).json({
+                    return res.status(200).json({
                         userId: result[0].users_id,
                         token: jwt.sign(
                             { userId: result[0].users_id },
                             process.env.TOKEN,
                             { expiresIn: process.env.TOKEN_EXPIRES_IN}
-                        )
+                        ),
+                        isAdmin: result[0].isAdmin
                     });
                 }
             }
         });
     } else {
-        res.status(404).json({
-            message: "Saississez votre adresse E-mail"
-        });
+        return res.status(404).json({ message: "Saississez votre adresse E-mail" });
     }
 };
 
@@ -97,24 +90,24 @@ exports.selectAllUsers = (req, res) => {
         if(error){
             throw error;
         } else {
-            res.status(201).json(result)
+            return res.status(201).json(result)
         }
     });
 };
 
 exports.updateUserProfil = (req, res) => {
     if (req.body.user_name) {
-        bdd.query(Users.selectUsersByUserName(), [req.body.user_name], (err, result) => {
+        bdd.query(Users.selectUsersById(), [req.body.users_id], (err, result) => {
             if(err){
                 res.status(400).json(error(error.message));
             } else if (result[0] != undefined) {
-                return res.status(401).json(error("Ce pseudo est déjà utilisé par un autre membre !"));
+                return res.status(401).json(error("Cet id n'est pas reconnu"));
             } else {
-                bdd.query(Users.createUserProfil(), [req.body.user_name, req.body.user_age, req.body.user_biography, req.params.id], (err) => {
+                bdd.query(Users.updateUserProfil(), [req.body.users_email, req.body.users_name, req.body.users_age, req.body.users_biography, req.body.users_id], (err) => {
                     if(err){
-                        res.status(401).json(error(err.message))
+                        return res.status(401).json(error(err.message))
                     } else {
-                        res.status(201).json({ message: "Profil enregistré !" });
+                        return res.status(201).json({ message: "Profil modifié !" });
                     }
                 });
             }
@@ -128,11 +121,9 @@ exports.selectOneUser = (req, res) => {
             throw error;
         } else {
             if(result[0] != undefined){
-                res.status(200).json(result[0]);
+                return res.status(200).json(result[0]);
             } else {
-                res.status(404).json({
-                    message: "Utilisateur introuvable",
-                })
+                return res.status(404).json({message: "Utilisateur introuvable"})
             }
         }
     })
@@ -149,37 +140,15 @@ exports.deleteOneUser = (req, res) => {
                         if(err) {
                             throw err;
                         } else {
-                            res.status(200).json({
-                                message: "Membre supprimé !",
-                            });
+                            return res.status(200).json({message: "Membre supprimé !"});
                         }
                     });
                 } else {
-                    res.status(403).json({
-                        message: "Vous ne pouvez pas supprimer cet utilisateur",
-                    });
+                    return res.status(403).json({message: "Vous ne pouvez pas supprimer cet utilisateur"});
                 }
             } else {
-                res.status(404).json({
-                    message: "Utilisateur non reconnu",
-                });
+                return res.status(404).json({message: "Utilisateur non reconnu"});
             }
         }
     })
 };
-
-exports.updateUserName = () => {
-
-};
-
-exports.updateUsersEmail = () => {
-
-}
-
-exports.updateUsersAge = () => {
-
-}
-
-exports.updateUsersBiography = () => {
-
-}

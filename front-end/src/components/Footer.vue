@@ -1,14 +1,14 @@
 <script>
 export default {
-    name: 'Footer',
-}
+  name: "Footer",
+};
 </script>
 
 <template>
   <footer>
     <nav>
       <ul>
-        <li><router-link to="/LegalNotice">Mentions légales</router-link></li>
+        <li><a href="/LegalNotice">Mentions légales</a></li>
         <li><a href="mailto:contact@groupomania.com">Contactez-nous</a></li>
       </ul>
     </nav>
@@ -16,7 +16,6 @@ export default {
 </template>
 
 <style scoped>
-
 footer {
   margin-top: 2vh;
   height: 7vh;
@@ -28,21 +27,21 @@ nav {
   height: 100%;
 }
 
-ul{
+ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
-li a{
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 15px;
-    padding: 5px 20px;
+li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 5px 20px;
 }
 </style>

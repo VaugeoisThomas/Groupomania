@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
         const token = AuthHeader.split(' ')[1];
         jwt.verify(token, process.env.TOKEN, (err, user) => {
             if(err) {
-                throw err
+                res.status(403);
             } else {
                 req.userId = user;
                 next();

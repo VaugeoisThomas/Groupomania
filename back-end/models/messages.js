@@ -1,4 +1,5 @@
 exports.getAllMessages = () => {
     return `SELECT * 
-            FROM messages DESC`;
+            FROM messages 
+            DESC`;
 };

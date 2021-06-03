@@ -33,7 +33,7 @@
                         <h2>Modification du profil</h2>
                     </div>
                     <div class="card-body">
-                        <form @submit="update" method="put" id="form-validation" novalidate>
+                        <form @submit.prevent="update" method="put" id="form-validation" novalidate>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -72,7 +72,7 @@
                         </form>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-success" v-on:click: "update" ></button>
+                        <button type="submit" class="btn btn-success" v-on:click="update()">Modifier mon profil</button>
                     </div>
                 </div>
         </section>
@@ -102,11 +102,24 @@ export default {
         })
         .catch(() => {
             alert('Nous rencontrons des problèmes à vous identifier, veuillez rééssayer plus tard !')
-        })
+        });
     },
     methods: {
         update() {
+            var formulaire = document.querySelector("#form-validation");
 
+            if(formulaire.checkValidity(event) === false){
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                axios.put("http://localhost:3000/api/users/" + this.userId + "/profil", this.profil)
+                .then(() => {
+                    window.location.reload();
+                })
+                .catch(() => {
+                    alert("Un problème serveur est survenu, veuillez rééssayer ultérieurement")
+                });
+            }
         }
     }
 }

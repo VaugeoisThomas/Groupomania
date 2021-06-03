@@ -8,6 +8,6 @@ exports.error = (message) => {
 exports.success = (result) => {
     return {
         status: "success",
-        result: result
+        result: result,
     };
 };

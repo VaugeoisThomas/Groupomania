@@ -1,12 +1,12 @@
 <template>
     <main class="container">
-        <div class="row m-5">
+        <div class="row md-5">
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h1 class="card-title text-uppercase">Connexion</h1>
                 </div>
                 <div class="card-body">
-                    <form @submit="login" method="post" id="form-validation" novalidate>
+                    <form @submit="login" method="post" id="form-validation">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
@@ -22,7 +22,7 @@
                                     <div class="error">Votre mot de passe doit contenir minimum 8 caractères dont une majuscule et un chiffre</div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 mt-2">
+                            <div class="col-sm-6 col-md-6 mt-2">
                                 <button class="btn btn-secondary" id="valider" value="valider" type="submit">Connexion</button>
                             </div>
                         </div>
@@ -45,21 +45,25 @@ export default {
         };
     },
     methods: {
-        login(event){
-            event.preventDefault();
+        login(e){
+            e.preventDefault();
             let form = document.querySelector("#form-validation");
-            if(form.checkValidity(event) === false){
-                event.preventDefault();
-                event.stopPropagation();
+            if(form.checkValidity(e) === false){
+                e.preventDefault();
+                e.stopPropagation();
             } else {
-                axios.post("http://localhost:3000/api/users/login", {users_email: this.user_email, users_password: this.user_password})
+                axios.post("http://localhost:3000/api/users/login", {
+                    users_email: this.user_email, 
+                    users_password: this.user_password
+                    })
                     .then((response) => {
                         localStorage.setItem("jwt", response.data.token);
                         localStorage.setItem("userId", response.data.userId);
+                        localStorage.setItem("isAdmin", response.data.isAdmin)
                         response.headers = {
                             Authorization: "Bearer " + response.data.token,
                         };
-                        window.location.href = "/forum"
+                        window.location.href = "/forum";
                     })
                     .catch("Utilisateur non reconnu");
             }
@@ -79,8 +83,12 @@ export default {
 .bg-primary{
     background-color: rgb(30, 30, 30) !important;
 }
+
 .card-title{
-    text-align: center;
-    
+    text-align: center; 
+}
+
+.ok{
+    border: 1px solid green;
 }
 </style>

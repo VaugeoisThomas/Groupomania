@@ -29,6 +29,7 @@ exports.selectUsersByEmail = () => {
 exports.updateUserProfil = () => {
     return `UPDATE users
             SET 
+                users_email = ?,
                 users_name = ?,
                 users_age = ?,
                 users_biography = ? 
