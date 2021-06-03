@@ -23,9 +23,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-12 mt-2">
-                                <button class="btn btn-secondary" id="valider" value="valider" type="submit">
-                                    Connexion
-                                </button>
+                                <button class="btn btn-secondary" id="valider" value="valider" type="submit">Connexion</button>
                             </div>
                         </div>
                     </form>

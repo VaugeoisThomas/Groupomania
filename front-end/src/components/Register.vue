@@ -22,6 +22,26 @@
                                     <div class="error">Votre mot de passe doit contenir minimum 8 caractères dont une majuscule et un chiffre</div>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="user_name">Pseudo</label>
+                                    <input v-model="user_name" type="text" class="form-control" id="user_name" name="user_name" placeholder="Votre pseudo" required>
+                                    <div class="error">Merci de saisir votre pseudo</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="user_age">Age</label>
+                                    <input v-model="user_age" type="number" class="form-control" id="user_age" name="user_age" placeholder="Votre age" required>
+                                    <div class="error">Votre age doit être un chiffre entre 18 et 99</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="user_biography">Votre biographie</label>
+                                    <textarea v-model="user_biography" type="text" class="form-control" id="user_biography" name="user_biography" placeholder="Votre biographie" />
+                                </div>
+                            </div>
                             <div class="col-sm-12 col-md-12 mt-2">
                                 <button class="btn btn-secondary" id="valider" value="valider" type="submit">Inscription</button>
                             </div>
@@ -41,6 +61,9 @@ export default {
         return {
             user_email: null,
             user_password: null,
+            user_name: null,
+            user_age: null,
+            user_biography: null
         };
     },
     methods: {
@@ -53,8 +76,15 @@ export default {
                 event.preventDefault();
                 event.stopPropagation();
             }else{
-                axios.post("http://localhost:3000/api/users", {users_email: this.user_email, users_password: this.user_password})
+                axios.post("http://localhost:3000/api/users", {
+                    users_email: this.user_email, 
+                    users_password: this.user_password, 
+                    users_name: this.user_name, 
+                    users_age: this.user_age, 
+                    users_biography: this.user_biography
+                    })
                     .then((response) => {
+                        localStorage.setItem("isAdmin", response.data.isAdmin)
                         localStorage.setItem("jwt", response.data.token);
                         localStorage.setItem("userId", response.data.userId);
                         response.headers = { 
@@ -86,12 +116,12 @@ export default {
 
 .card-title{
     text-align: center;
-    
 }
 
 input:invalid{
     border: 2px solid red;
 }
+
 input:valid{
     border: 2px solid green;
 }

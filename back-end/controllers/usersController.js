@@ -17,8 +17,16 @@ exports.createUser = (req, res) => {
                     bcrypt.hash(req.body.users_password, 10)
                     .then( hash => {
                         let passwordHashed = hash;
-                        bdd.query(Users.creationUser(), [req.body.users_email, passwordHashed], (err) => {
+                        bdd.query(Users.creationUser(), 
+                        [
+                            req.body.users_email, 
+                            passwordHashed, 
+                            req.body.users_name,
+                            req.body.users_age, 
+                            req.body.users_biography
+                        ], (err) => {
                             if(err){
+                                console.log(err)
                                 return res.status(401).json(error(err.message));
                             } else {
                                 bdd.query(Users.selectUsersByEmail(), [req.body.users_email], (err, result) =>  {
@@ -31,7 +39,8 @@ exports.createUser = (req, res) => {
                                                 { userId: result[0].users_id},
                                                 process.env.TOKEN,
                                                 { expiresIn: process.env.TOKEN_EXPIRES_IN}
-                                            )
+                                            ),
+                                            isAdmin: result[0].isAdmin
                                         });
                                     }
                                 })
@@ -93,15 +102,15 @@ exports.selectAllUsers = (req, res) => {
     });
 };
 
-exports.createUserProfil = (req, res) => {
-    if (req.body.users_name) {
-        bdd.query(Users.selectUsersByUserName(), [req.body.users_name], (err, result) => {
+exports.updateUserProfil = (req, res) => {
+    if (req.body.user_name) {
+        bdd.query(Users.selectUsersByUserName(), [req.body.user_name], (err, result) => {
             if(err){
                 res.status(400).json(error(error.message));
             } else if (result[0] != undefined) {
                 return res.status(401).json(error("Ce pseudo est déjà utilisé par un autre membre !"));
             } else {
-                bdd.query(Users.createUserProfil(), [req.body.users_name, req.body.users_age, req.body.users_biography, req.params.id], (err) => {
+                bdd.query(Users.createUserProfil(), [req.body.user_name, req.body.user_age, req.body.user_biography, req.params.id], (err) => {
                     if(err){
                         res.status(401).json(error(err.message))
                     } else {
@@ -135,8 +144,8 @@ exports.deleteOneUser = (req, res) => {
             throw err;
         } else {
             if(result[0] != undefined){
-                if(req.params.id === result[0].users_id) {
-                    bdd.query(Users.deleteUsers(), [req.params.id], (err, result) => {
+                if(req.params.id == result[0].users_id) {
+                   bdd.query(Users.deleteUsers(), [req.params.id], (err, result) => {
                         if(err) {
                             throw err;
                         } else {
@@ -147,7 +156,7 @@ exports.deleteOneUser = (req, res) => {
                     });
                 } else {
                     res.status(403).json({
-                        message: "Vous ne pouvez pas supprimé cet utilisateur",
+                        message: "Vous ne pouvez pas supprimer cet utilisateur",
                     });
                 }
             } else {

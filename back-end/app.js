@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const app = express();
 
 const users = require('./routes/usersRouter');
+const messages = require('./routes/messagesRouter');
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: false}));
@@ -17,5 +18,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/users", users);
+app.use("/api/forum", messages);
 
 module.exports = app;

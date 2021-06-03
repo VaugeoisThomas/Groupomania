@@ -1,119 +1,112 @@
 <template>
     <main class="container">
-        <div class="row">
-            <div class="card">
-                <div v-if="profil.users_name === ''" class="card-body">
-                    <h1 class="card-title text-uppercase">Création du profil </h1>
-                    <form @submit="creationProfil.prevent" method="put" id="form-validation" novalidate>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="user_name">Pseudo</label>
-                                    <input v-model="user_name" type="text" class="form-control" id="user_name" name="user_name" placeholder="Votre pseudo" required>
-                                    <div class="error">Merci de saisir votre pseudo</div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="user_age">Age</label>
-                                    <input v-model="user_age" type="number" class="form-control" id="user_age" name="user_age" placeholder="Votre age" required>
-                                    <div class="error">Votre age doit être un chiffre entre 18 et 99</div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label for="user_biography">Votre biographie</label>
-                                    <textarea v-model="user_biography" type="text" class="form-control" id="user_biography" name="user_biography" placeholder="Votre biographie" />
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-12 mt-2">
-                                <button class="btn btn-secondary" id="valider" value="valider" type="submit">Création du profil</button>
-                            </div>
+        <section>
+            <div class="row">
+                <div class="card">
+                    <card class="card-header bg-success">
+                        <h1>Profil de {{ profil.users_name }}</h1>
+                    </card>
+                    <div class="card-body">
+                        <div class="card-text">
+                            <p>Pseudo: {{ profil.users_name }}</p>
                         </div>
-                    </form>     
-                </div>
-                <div v-else class="card-body">
-                    <div class="card-title text-uppercase">Informations</div>
-                    <p class="card-text">Votre pseudo: {{ profil.users_name }}</p>
-                    <p class="card-text">Votre adresse email: {{ profil.users_email }}</p>
-                    <p class="card-text">Votre age: {{ profil.users_age }}</p>
-                    <p class="card-text">Votre biographie: {{ profil.users_biography }}</p>
-                </div>
-                <div class="card-footer">
-                    <h1>Options</h1>
-                    <button class="btn btn-danger" type="button" id="suppression" value="suppression" @click="deletionProfil()">Supprimer votre compte</button>
-                    <button class="btn btn-success" type="button" id="modification" value="modification" @click="profilModification()">Modifier votre profil</button>
+                        <div class="card-text">
+                            <p>Age: {{ profil.users_age }}</p>
+                        </div>
+                        <div class="card-text">
+                            <p>Biographie: {{ profil.users_biography }}</p>
+                        </div>
+                        <div class="card-text">
+                            <p>Email: {{ profil.users_email }}</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-success" v-on:click="updateProfil = !updateProfil">Modifier son profil</button>
+                        <button class="btn btn-danger" v-on:click="deleteProfil = !deleteProfil">Supprimer son compte</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+        <section v-show="updateProfil">
+                <div class="card">
+                    <div class="card-header bg-primary">
+                        <h2>Modification du profil</h2>
+                    </div>
+                    <div class="card-body">
+                        <form @submit="update" method="put" id="form-validation" novalidate>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="username">Modification pseudo</label>
+                                        <input v-model="profil.users_name" type="text" class="form-control" id="username" name="username" required />
+                                        <div class="error">Merci de saisir un pseudo</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="age">Modification d'age</label>
+                                        <input v-model="profil.users_age" type="number" class="form-control" id="age" name="age" required />
+                                        <div class="error">Merci de saisir un chiffre compris entre 18 et 99</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="text">Modification Biographie</label>
+                                        <textarea v-model="profil.users_biography" class="form-control" id="biography" name="biography"/>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="email">Modification email</label>
+                                        <input v-model="profil.users_email" type="email" class="form-control" id="email" name="email" required />
+                                        <div class="error">Merci de saisir un email valide</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-success" v-on:click: "update" ></button>
+                    </div>
+                </div>
+        </section>
     </main>
 </template>
 
-<script>
 
+<script>
 import axios from 'axios';
 export default {
     name: "Profil",
     data(){
-        return {
-            user_name: null,
-            user_age: null,
-            user_biography: null,
+        return{
             profil: [],
-            userId: "",
-            token: "",
+            userId: '',
+            token: '',
+            updateProfil: false,
+            deleteProfil: false,
         }
-
     },
-    created(){
-        if(localStorage.userId) {
-            this.userId = localStorage.userId
-        }
-        if(localStorage.jwt) {
-            this.token = localStorage.jwt;
-        }
+    created() {
+        if(localStorage.userId) this.userId = localStorage.userId;
+        if(localStorage.token) this.token = localStorage.jwt;
         axios.get("http://localhost:3000/api/users/" + this.userId)
         .then((response) => {
             this.profil = response.data;
         })
         .catch(() => {
-            alert('Un problème inconnu viens de se produire !')
-        });
+            alert('Nous rencontrons des problèmes à vous identifier, veuillez rééssayer plus tard !')
+        })
     },
     methods: {
-        creationProfil(event) {
-            var that = this;
-            event.preventDefault();
+        update() {
 
-            let form = document.querySelector('#form-validation');
-            if(form.checkValidity(event) === false){
-                event.preventDefault();
-                event.stopPropagation();
-            }else{
-                axios.put("http://localhost:3000/api/users/" + this.userId + "/profil", {users_name: this.user_name, users_age: this.user_age, users_biography: this.user_biography })
-                    .then((response) => {
-                        response.headers = { 
-                            Authorization: "Bearer " + response.data.token
-                        };
-                        window.location.href = '/profil';
-                    })
-                    .catch(() => {
-                        that.error = "L'email est déjà utilisé";
-                    });
-            }
-        },
-        deletionProfil(){
-            const configuration = {
-                headers: { Authorization: 'Bearer ' + this.token },
-            }
-            axios.delete("http://localhost:3000/api/users/" + this.userId, configuration)
-                .then(() => {
-                    localStorage.clear();
-                    window.location.href = "/";
-                })
-                .catch(() => {
-                    alert('Vous n\'avez pas les droits de supprimer ce profil !')
-                })
         }
     }
 }

@@ -26,7 +26,7 @@ exports.selectUsersByEmail = () => {
 };
 
 //CREATE USERS_PROFIL
-exports.createUserProfil = () => {
+exports.updateUserProfil = () => {
     return `UPDATE users
             SET 
                 users_name = ?,
@@ -72,8 +72,8 @@ exports.updateUsersBiography = () => {
 
 //CREATE USERS
 exports.creationUser = () => {
-    return `INSERT INTO users (users_email, users_password)
-            VALUE (?, ?)`;
+    return `INSERT INTO users (users_email, users_password, users_name, users_age, users_biography)
+            VALUE (?, ?, ?, ?, ?)`;
 };
 
 //DELETE USERS
