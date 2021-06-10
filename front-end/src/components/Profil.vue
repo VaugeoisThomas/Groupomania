@@ -3,7 +3,7 @@
         <section>
             <div class="row">
                 <div class="card">
-                    <card class="card-header bg-success">
+                    <card class="card-header bg-secondary">
                         <h1>Profil de {{ profil.users_name }}</h1>
                     </card>
                     <div class="card-body">
@@ -21,60 +21,27 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-success" v-on:click="updateProfil = !updateProfil">Modifier son profil</button>
                         <button class="btn btn-danger" v-on:click="deleteProfil = !deleteProfil">Supprimer son compte</button>
                     </div>
                 </div>
             </div>
         </section>
-        <section v-show="updateProfil">
+        <section v-show="deleteProfil">
+            <form @submit.prevent="deleteAccount(profil.users_id)" method="delete">
                 <div class="card">
-                    <div class="card-header bg-primary">
-                        <h2>Modification du profil</h2>
+                    <div class="card-header bg-danger">
+                        <h2>Attention</h2>
                     </div>
                     <div class="card-body">
-                        <form @submit.prevent="update" method="put" id="form-validation" novalidate>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="username">Modification pseudo</label>
-                                        <input v-model="profil.users_name" type="text" class="form-control" id="username" name="username" required />
-                                        <div class="error">Merci de saisir un pseudo</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="age">Modification d'age</label>
-                                        <input v-model="profil.users_age" type="number" class="form-control" id="age" name="age" required />
-                                        <div class="error">Merci de saisir un chiffre compris entre 18 et 99</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="text">Modification Biographie</label>
-                                        <textarea v-model="profil.users_biography" class="form-control" id="biography" name="biography"/>
-                                    </div>
-                                </div>
-                            </div> 
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="email">Modification email</label>
-                                        <input v-model="profil.users_email" type="email" class="form-control" id="email" name="email" required />
-                                        <div class="error">Merci de saisir un email valide</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        <div class="card-text">
+                            <p>Vous êtes sur le point de supprimer votre profil ! Cette action est irreversible !</p>
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success" v-on:click="update()">Modifier mon profil</button>
+                        <button type="submit" class="btn btn-success" v-on:click="deleteAccount">Supprimer mon compte</button>
                     </div>
                 </div>
+            </form>
         </section>
     </main>
 </template>
@@ -87,15 +54,18 @@ export default {
     data(){
         return{
             profil: [],
-            userId: '',
-            token: '',
-            updateProfil: false,
+            userId: "",
+            token: "",
             deleteProfil: false,
         }
     },
-    created() {
-        if(localStorage.userId) this.userId = localStorage.userId;
-        if(localStorage.token) this.token = localStorage.jwt;
+    created() { 
+        if(localStorage.userId){
+            this.userId = localStorage.userId;
+        }
+        if(localStorage.token){
+            this.token = localStorage.jwt;    
+        } 
         axios.get("http://localhost:3000/api/users/" + this.userId)
         .then((response) => {
             this.profil = response.data;
@@ -105,21 +75,19 @@ export default {
         });
     },
     methods: {
-        update() {
-            var formulaire = document.querySelector("#form-validation");
-
-            if(formulaire.checkValidity(event) === false){
-                event.preventDefault();
-                event.stopPropagation();
-            } else {
-                axios.put("http://localhost:3000/api/users/" + this.userId + "/profil", this.profil)
-                .then(() => {
-                    window.location.reload();
-                })
-                .catch(() => {
-                    alert("Un problème serveur est survenu, veuillez rééssayer ultérieurement")
-                });
-            }
+        deleteAccount() {
+            const configuration = {
+                headers: {
+                    Authorization: `Bearer ` + this.token,
+                }
+            };
+            axios.delete("http://localhost:3000/api/users/" + this.userId, configuration)
+            .then(() => {
+                localStorage.clear();
+                window.location.href = '/';
+            }).catch(() => {
+                alert('Vous ne pouvez pas supprimer ce profil');
+            })
         }
     }
 }
