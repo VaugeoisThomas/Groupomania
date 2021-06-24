@@ -4,11 +4,13 @@ const password_schema = require("../middleware/password-validator");
 const { error, success } = require("../middleware/error-management");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const MaskData = require('maskdata');
 
 exports.createUser = (req, res) => {
     if (password_schema.validate(req.body.users_password)) {
         if (req.body.users_email) {
-            bdd.query(Users.selectUsersByEmail(), [req.body.users_email], (err, result) =>{
+            const maskedEmail = MaskData.maskEmail2(req.body.users_email);
+            bdd.query(Users.selectUsersByEmail(), req.body.users_email, (err, result) =>{
                 if(err){
                     return res.status(400).json(error(error.message))
                 } else if (result[0] != undefined) {
@@ -19,14 +21,13 @@ exports.createUser = (req, res) => {
                         let passwordHashed = hash;
                         bdd.query(Users.creationUser(), 
                         [
-                            req.body.users_email, 
-                            passwordHashed, 
+                            maskedEmail, 
+                            passwordHashed,
                             req.body.users_name,
                             req.body.users_age, 
                             req.body.users_biography
                         ], (err) => {
                             if(err){
-                                console.log(err)
                                 return res.status(401).json(error(err.message));
                             } else {
                                 bdd.query(Users.selectUsersByEmail(), [req.body.users_email], (err, result) =>  {
@@ -48,40 +49,45 @@ exports.createUser = (req, res) => {
                             }
                         });
                     })
-                    .catch(error => res.status(500).json({ error }))
+                    .catch(error => res.status(500).json(error(error)))
                 }
             })
         } else {
-            return res.status(404).json({message: "Veuillez saisir votre adresse Email !"})
+            return res.status(404).json(error("Veuillez saisir votre adresse Email !"));
         }
     } else {
-        return res.status(404).json({message: "Votre mot de passe n'est pas valide !"})
+        return res.status(404).json(error("Votre mot de passe n'est pas valide !"))
     }
 };
 
 exports.login = (req, res) => {
     if (req.body.users_email) {
-        bdd.query(Users.selectUsersByEmail(), [req.body.users_email], (error, result) => {
+        const maskedEmail = MaskData.maskEmail2(req.body.users_email);
+        bdd.query(Users.selectUsersByEmail(), maskedEmail, (error, result) => {
             if (error) {
                 throw error;
             } else {
-                if (!result[0] || !bcrypt.compare(req.body.users_password, result[0].users_password)) {
-                    return res.status(401).json({ message: "Mot de passe incorrect" })
+                if(maskedEmail === result[0].users_email){
+                    if (!result[0] || !bcrypt.compare(req.body.users_password, result[0].users_password)) {
+                        return res.status(401).json({ message: "Mot de passe incorrect" })
+                    } else {
+                        return res.status(200).json({
+                            userId: result[0].users_id,
+                            token: jwt.sign(
+                                { userId: result[0].users_id },
+                                process.env.TOKEN,
+                                { expiresIn: process.env.TOKEN_EXPIRES_IN}
+                            ),
+                            isAdmin: result[0].isAdmin
+                        });
+                    }
                 } else {
-                    return res.status(200).json({
-                        userId: result[0].users_id,
-                        token: jwt.sign(
-                            { userId: result[0].users_id },
-                            process.env.TOKEN,
-                            { expiresIn: process.env.TOKEN_EXPIRES_IN}
-                        ),
-                        isAdmin: result[0].isAdmin
-                    });
+                    return res.status(401).json({ message: "Votre email est incorrect" });
                 }
             }
         });
     } else {
-        return res.status(404).json({ message: "Saississez votre adresse E-mail" });
+        return res.status(401).json({ message: "Saississez votre adresse E-mail" });
     }
 };
 

@@ -13,13 +13,18 @@
                 </div>
             </div>
         </div>
+        <Message v-for="message in messages.slice().reverse()" :key="message.messages_id" :message="message" />
     </main>
 </template>
 
 <script>
 import axios from 'axios';
+import Message from './Message.vue'
 export default {
     name: "Forum",
+    components: {
+        Message
+    },
     data() {
         return  {
             messages: []

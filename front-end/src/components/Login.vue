@@ -1,12 +1,18 @@
 <template>
     <main class="container">
         <div class="row md-5">
+            <div v-if="errMessage" class="alert alert-danger">
+                {{ errMessage }}
+            </div>
+            <div v-if="successMessage" class="alert alert-success">
+                {{ successMessage }}
+            </div>
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h1 class="card-title text-uppercase">Connexion</h1>
                 </div>
                 <div class="card-body">
-                    <form @submit="login" method="post" id="form-validation">
+                    <form method="post" id="form-validation">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
@@ -23,7 +29,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6 mt-2">
-                                <button class="btn btn-secondary" id="valider" value="valider" type="submit">Connexion</button>
+                                <button @click="login()" class="btn btn-secondary" id="valider" value="valider" type="submit">Connexion</button>
                             </div>
                         </div>
                     </form>
@@ -41,31 +47,36 @@ export default {
     data(){
         return {
             user_email: null,
-            user_password: null
+            user_password: null,
+            errMessage: "",
+            successMessage: "",
         };
     },
     methods: {
         login(e){
-            e.preventDefault();
-            let form = document.querySelector("#form-validation");
-            if(form.checkValidity(e) === false){
+            if(e){
                 e.preventDefault();
                 e.stopPropagation();
             } else {
+                var that = this;
                 axios.post("http://localhost:3000/api/users/login", {
                     users_email: this.user_email, 
                     users_password: this.user_password
-                    })
-                    .then((response) => {
-                        localStorage.setItem("jwt", response.data.token);
-                        localStorage.setItem("userId", response.data.userId);
-                        localStorage.setItem("isAdmin", response.data.isAdmin)
-                        response.headers = {
-                            Authorization: "Bearer " + response.data.token,
-                        };
-                        window.location.href = "/forum";
-                    })
-                    .catch("Utilisateur non reconnu");
+                })
+                .then(function(response){
+                    that.errMessage = "";
+                    that.successMessage = "Connexion réussie !";
+                    localStorage.setItem("jwt", response.data.token);
+                    localStorage.setItem("userId", response.data.userId);
+                    localStorage.setItem("isAdmin", response.data.isAdmin)
+                    response.headers = {
+                        Authorization: "Bearer " + response.data.token,
+                    };
+                    window.location.href = "/forum";
+                })
+                .catch(function(){
+                    that.errMessage = "Utilisateur non reconnu !"
+                });
             }
         }  
     }
