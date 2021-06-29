@@ -25,52 +25,6 @@ exports.selectUsersByEmail = () => {
             WHERE users_email = ?`;
 };
 
-//CREATE USERS_PROFIL
-exports.updateUserProfil = () => {
-    return `UPDATE users
-            SET 
-                users_email = ?,
-                users_name = ?,
-                users_age = ?,
-                users_biography = ? 
-            WHERE users_id = ?`;
-};
-
-//UPDATE USERS_NAME
-exports.updateUsersName = () => {
-    return `UPDATE users
-            SET users_name = ?
-            WHERE users_id = ?`;
-};
-
-//UPDATE USERS_AGE
-exports.updateUsersAge = () => {
-    return `UPDATE users
-            SET users_age = ?
-            WHERE users_id = ?`;
-};
-
-//UPDATE USERS_PASSWORD
-exports.updateUsersPassword = () => {
-    return `UPDATE users
-            SET users_password = ?
-            WHERE users_id = ?`;
-};
-
-//UPDATE USERS_EMAIL
-exports.updateUsersEmail = () => {
-    return `UPDATE users
-            SET users_email = ?
-            WHERE users_id = ?`;
-};
-
-//UPDATE USERS_BIOGRAPHY
-exports.updateUsersBiography = () => {
-    return `UPDATE users
-            SET users_biography = ?
-            WHERE users_id = ?`;
-};
-
 //CREATE USERS
 exports.creationUser = () => {
     return `INSERT INTO users (users_email, users_password, users_name, users_age, users_biography)

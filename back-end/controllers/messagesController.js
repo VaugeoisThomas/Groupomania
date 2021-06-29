@@ -10,3 +10,7 @@ exports.getAllMessages = (req, res) => {
         }
     });
 };
+
+exports.deleteMessage = (req, res) => {
+    bdd.query()
+};

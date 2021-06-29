@@ -1,6 +1,6 @@
 <template>
   <main class="main">
-    <div class="forum">
+    <div class="container">
         <p class="animations">Groupomania</p>
     </div>
   </main>
@@ -24,7 +24,7 @@ export default {
     align-items: center;
 }
 
-.forum {
+.container {
     margin: 1%;
     padding: 1%;
     color: white;

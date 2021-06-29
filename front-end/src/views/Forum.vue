@@ -1,6 +1,6 @@
 <template>
   <div class='main'>
-    <Forum />
+    <Forum />  
   </div>
 </template>
 
@@ -9,9 +9,9 @@
 import Forum from '@/components/Forum'
 
 export default {
-  name: 'Forum',
+  name: 'forum',
   components: {
     Forum
-  }
+  },
 }
 </script>

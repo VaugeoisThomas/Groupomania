@@ -21,7 +21,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-danger" v-on:click="deleteProfil = !deleteProfil">Supprimer son compte</button>
+                        <button class="btn btn-danger" @click="deleteProfil = !deleteProfil">Supprimer son compte</button>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success" v-on:click="deleteAccount">Supprimer mon compte</button>
+                        <button type="submit" class="btn btn-success" @click="deleteAccount">Supprimer mon compte</button>
                     </div>
                 </div>
             </form>

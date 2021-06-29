@@ -25,7 +25,7 @@ const routes = [
     path:'/forum',
     name:'Forum',
     component: () => import(/* webpackChunkName: "forum" */ '../views/Forum.vue')
-  }
+  },
 ]
 
 const router = createRouter({

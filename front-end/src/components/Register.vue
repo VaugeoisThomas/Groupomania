@@ -88,7 +88,7 @@ export default {
         users_age: this.user_age,
         users_biography: this.user_biography,
       })
-      .then(function(response) {
+      .then((response) => {
         that.errMessage = "";
         that.successMessage = "Inscription effectuée avec succés ! Bienvenue sur notre site !"
         localStorage.setItem("jwt", response.data.token);
@@ -99,7 +99,7 @@ export default {
         };
         window.location.href = "/forum";
       })
-      .catch(function(){
+      .catch(() => {
         that.errMessage = "L'email est déjà utilisé";
       });
     },
