@@ -1,12 +1,5 @@
 <template>
   <main class="container">
-    <div class="row md-5">
-      <div v-if="errMessage" class="alert alert-danger">
-          {{ errMessage }}
-      </div>
-      <div v-if="successMessage" class="alert alert-success">
-          {{ successMessage }}
-      </div>
       <div class="card">
         <div class="card-header bg-primary text-white">
           <h1 class="card-title text-uppercase">Inscription</h1>
@@ -55,6 +48,13 @@
           </div>
         </div>
       </div>
+      <div class="row md-12">
+        <div v-if="errMessage" class="alert alert-danger">
+            {{ errMessage }}
+        </div>
+        <div v-if="successMessage" class="alert alert-success">
+            {{ successMessage }}
+        </div>
     </div>
   </main>
 </template>
@@ -112,11 +112,17 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  min-height: 71vh;
+  min-height: 73vh;
+}
+
+.card{
+    border: 2px solid black;
+    margin-bottom: 2%;
 }
 
 .bg-primary {
-  background-color: rgb(30, 30, 30) !important;
+    background-color: #fd2d01 !important;
+    color: white;
 }
 
 .card-title {

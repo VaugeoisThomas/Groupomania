@@ -3,7 +3,7 @@
         <section>
             <div class="row">
                 <div class="card">
-                    <card class="card-header bg-secondary">
+                    <card class="card-header bg-orange">
                         <h1>Profil de {{ profil.users_name }}</h1>
                     </card>
                     <div class="card-body">
@@ -28,7 +28,7 @@
         </section>
         <section v-show="deleteProfil">
             <form @submit.prevent="deleteAccount(profil.users_id)" method="delete">
-                <div class="card">
+                <div class="card ">
                     <div class="card-header bg-danger">
                         <h2>Attention</h2>
                     </div>
@@ -98,8 +98,7 @@ export default {
 .container {
     display: flex;
     flex-direction: column;
-    min-height: 71vh;
-    border: 1px solid red;
+    min-height: 73vh;
 }
 
 .row{
@@ -107,8 +106,14 @@ export default {
     margin: 0 auto !important;
 }
 
+.bg-orange{
+    background-color: #fd2d01;
+    color: white;
+}
+
 .card{
     width: 100%;
+    
 }
 
 .card-title {

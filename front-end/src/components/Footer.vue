@@ -6,42 +6,19 @@ export default {
 
 <template>
   <footer>
-    <nav>
-      <ul>
-        <li><a href="/LegalNotice">Mentions légales</a></li>
-        <li><a href="mailto:contact@groupomania.com">Contactez-nous</a></li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-orange">
+      <div class="container-fluid">
+        <ul class="navbar-nav me-auto my-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/LegalNotice">Mentions légales</a></li>
+          <li class="nav-item"><a class="nav-link" href="mailto:contact@groupomania.com">Contactez-nous</a></li>
+        </ul>
+      </div>
     </nav>
   </footer>
 </template>
 
 <style scoped>
-footer {
-  margin-top: 2vh;
-  height: 7vh;
-  width: 100%;
-}
-nav {
-  background-color: rgb(30, 30, 30);
-  color: #fff;
-  height: 100%;
-}
-
-ul {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-li {
-  list-style: none;
-}
-
-li a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 15px;
-  padding: 5px 20px;
+.bg-orange {
+  background-color: #fd2d01;
 }
 </style>

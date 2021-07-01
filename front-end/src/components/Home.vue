@@ -16,7 +16,7 @@ export default {
 <style scoped>
 .main {
     max-width: 100%;
-    min-height: 71vh;
+    min-height: 79vh;
     padding: 1%;
     display: flex;
     flex-direction: row;
@@ -27,8 +27,8 @@ export default {
 .container {
     margin: 1%;
     padding: 1%;
-    color: white;
-    text-shadow: 0 5px rgb(30, 30, 30);
+    color: #fd2d01;
+    text-shadow: 0 5px #ffd7d7;
 }
 
 .animations{

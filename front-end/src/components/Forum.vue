@@ -1,17 +1,30 @@
 <template>
-    <div class="main">
-        <div class="container">
-            <div class="row" v-for="message in messages" :key="message.messages_id"> 
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <p>{{ message.messages_text}} </p>
-                        </div>
-                        <div class="card-footer">
-                            <p> Message publié par <a href="/#" >{{ message.users_name}}</a> le {{ DateTranslation(message.createdAt)}}</p>
-                            <button @click="deleteMessage" v-if="userId == message.users_id">Supprimer votre message ?</button>
-                        </div>
+    <div class="container">
+        <div class="row messages" v-for="message in messages" :key="message.messages_id"> 
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-text mb-2 text-muted"> Message publié par <a href="/#" >{{ message.users_name}}</a> le {{ dateTranslation(message.createdAt)}}</p>
                     </div>
+                    <div class="card-body">
+                        <p class="card-subtitle">{{ message.messages_text}} </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="left">
+                            <p>J'aime/J'aime pas</p>
+                            <p>commentaires</p>
+                            <p>profil</p>
+                        </div>
+                        <button class="right btn btn-danger" @click="deleteMessage(message.messages_id)" v-if="userId == message.users_id">Supprimer votre message ?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row send">
+            <div class="col-md-12">
+                <div class="input-group mb-3">
+                    <input v-model='message_text' type="text" class="form-control">
+                    <button @click="addMessage" type="button" class="btn btn-secondary">Envoyer un message</button>
                 </div>
             </div>
         </div>
@@ -29,7 +42,8 @@ export default {
         return {
             messages: [],
             userId: '',
-            authenticate: ''
+            authenticate: '',
+            message_text: ""
         }
     },
     created(){
@@ -47,11 +61,38 @@ export default {
         }
     },
     methods: {
-        DateTranslation(date){
+        dateTranslation(date){
             return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY');
         },
-        deleteMessage(){
-            alert('Vous supprimer ce message !');
+        deleteMessage(message_id){
+            const configuration = {
+                headers: {
+                    Authorization: `Bearer ` + this.token,
+                }
+            };
+            axios.delete("http://localhost:3000/api/forum/" + message_id, configuration)
+            .then(() => {
+                window.location.reload();
+            })
+            .catch(() => {
+                alert('Vous ne pouvez pas supprimer ce message ! ')
+            })
+        },
+        addMessage(e){
+            if(e){
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            axios.post('http://localhost:3000/api/forum', {
+                messages_text: this.message_text,
+                users_id : this.userId,
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch(() => {
+                alert('Un problème est survenue durant l\'envoie du message');
+            });
         },
 
     }
@@ -62,11 +103,37 @@ export default {
 .container {
     display: flex;
     flex-direction: column;
-    min-height: 71vh;
-    border: 1px solid red;
+    min-height: 79vh;
+}
+
+.card {
+    box-shadow: -12px 12px 10px 0px #ffd7d7 !important;
+    border: 2px solid black;
+    margin-bottom: 2%;
 }
 
 .row{
     width: 100%;
+    margin-bottom: 1%;
+
+}
+
+.send {
+    bottom: 5vh;
+    position: static;
+    max-width: 60%;
+}
+
+.messages{
+    border-radius: 3%;
+}
+
+.right{
+    float: right;
+}
+
+.left {
+    display: flex;
+    flex-direction: row;
 }
 </style>

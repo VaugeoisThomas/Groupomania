@@ -1,9 +1,6 @@
 <template>
     <main class="container">
         <div class="row md-5">
-            <div v-if="errMessage" class="alert alert-danger">{{ errMessage }}</div>
-            <div v-if="successMessage" class="alert alert-success">{{ successMessage }}
-            </div>
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h1 class="card-title text-uppercase">Connexion</h1>
@@ -31,6 +28,8 @@
                         </div>
                     </form>
                 </div>
+                <div v-if="errMessage" class="alert alert-danger">{{ errMessage }}</div>
+                <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
             </div>
         </div>
     </main>
@@ -84,10 +83,16 @@ export default {
     display: flex;
     justify-content: center;
     min-height: 71vh;
+    margin-bottom: 1%;
+}
+
+.card{
+    border: 2px solid black;
 }
 
 .bg-primary{
-    background-color: rgb(30, 30, 30) !important;
+    background-color: #fd2d01 !important;
+    color: white;
 }
 
 .card-title{
