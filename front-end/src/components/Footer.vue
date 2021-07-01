@@ -19,6 +19,11 @@ export default {
 
 <style scoped>
 .bg-orange {
-  background-color: #fd2d01;
+  background-color: #ffd7d7;
 }
+
+.nav-link {
+  color: #fd2d01 !important;
+}
+
 </style>

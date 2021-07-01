@@ -3,7 +3,8 @@ require("dotenv").config();
 
 module.exports = (req, res, next) => {
     const AuthHeader = req.headers.authorization;
-    if(AuthHeader) {
+    console.log(AuthHeader);
+    /*if(AuthHeader) {
         const token = AuthHeader.split(' ')[1];
         jwt.verify(token, process.env.TOKEN, (err, user) => {
             if(err) {
@@ -15,5 +16,5 @@ module.exports = (req, res, next) => {
         });
     } else {
         res.status(401);
-    }
+    }*/
 }

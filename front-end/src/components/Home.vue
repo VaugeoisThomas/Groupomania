@@ -16,7 +16,7 @@ export default {
 <style scoped>
 .main {
     max-width: 100%;
-    min-height: 79vh;
+    min-height: 73vh;
     padding: 1%;
     display: flex;
     flex-direction: row;
@@ -32,20 +32,23 @@ export default {
 }
 
 .animations{
-    animation: rotate_entrance 3s ease-in-out 0.6s both;
+    animation: slide-in-fwd-bottom 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     font-size: 150px;
     text-align: center;
 
 }
 
-@keyframes rotate_entrance{
-    from {
-        transform: rotate(-360deg) scale(0);
-        opacity: 0;
-    }
-    to {
-        transform: rotate(180) scale(3);
-        opacity: 1;
-    }
+@keyframes slide-in-fwd-bottom {
+  0% {
+    -webkit-transform: translateZ(-1400px) translateY(800px);
+            transform: translateZ(-1400px) translateY(800px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateZ(0) translateY(0);
+            transform: translateZ(0) translateY(0);
+    opacity: 1;
+  }
 }
+
 </style>

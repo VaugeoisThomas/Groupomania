@@ -87,7 +87,9 @@ export default {
 }
 
 .card{
-    border: 2px solid black;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(248, 242, 242);
 }
 
 .bg-primary{

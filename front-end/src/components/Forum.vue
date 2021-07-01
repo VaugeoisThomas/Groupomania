@@ -4,18 +4,18 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <p class="card-text mb-2 text-muted"> Message publié par <a href="/#" >{{ message.users_name}}</a> le {{ dateTranslation(message.createdAt)}}</p>
+                        <p class="card-text mb-2 text-muted"> Message publié par 
+                            <span class="link" @click="goProfil(message.users_id)" style="cursor:pointer;" > {{ message.users_name }}</span> le {{ dateTranslation(message.createdAt)}} à {{getTime(message.createdAt) }} </p>
                     </div>
                     <div class="card-body">
                         <p class="card-subtitle">{{ message.messages_text}} </p>
                     </div>
                     <div class="card-footer">
-                        <div class="left">
+                        <div class="btn-options">
                             <p>J'aime/J'aime pas</p>
                             <p>commentaires</p>
-                            <p>profil</p>
                         </div>
-                        <button class="right btn btn-danger" @click="deleteMessage(message.messages_id)" v-if="userId == message.users_id">Supprimer votre message ?</button>
+                        <button class="btn btn-danger" @click="deleteMessage(message.messages_id)" v-if="userId == message.users_id || isAdmin == 1">Supprimer le message </button>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-moment.locale("fr");
+//moment.locale("fr");
 
 export default {
     name: "Forum",
@@ -42,6 +42,7 @@ export default {
         return {
             messages: [],
             userId: '',
+            isAdmin: '',
             authenticate: '',
             message_text: ""
         }
@@ -59,10 +60,17 @@ export default {
         if(localStorage.userId){
             this.userId = localStorage.userId;
         }
+        if(localStorage.isAdmin){
+            this.isAdmin = localStorage.isAdmin;
+        }
     },
     methods: {
         dateTranslation(date){
-            return moment(date, 'YYYY-MM-DD').format('DD-MM-YYYY');
+            return moment(date, 'YYYY-MM-DD', "fr").format('DD-MM-YYYY');
+        },
+
+        getTime(date){
+            return moment(date, 'HH-MM-SS').format('LT');
         },
         deleteMessage(message_id){
             const configuration = {
@@ -94,6 +102,9 @@ export default {
                 alert('Un problème est survenue durant l\'envoie du message');
             });
         },
+        goProfil(id){
+            this.$router.push({name:'Profil', params:{ id: id }})
+        },
 
     }
 }
@@ -103,19 +114,25 @@ export default {
 .container {
     display: flex;
     flex-direction: column;
-    min-height: 79vh;
+    min-height: 71vh;
 }
 
 .card {
     box-shadow: -12px 12px 10px 0px #ffd7d7 !important;
     border: 2px solid black;
+    border-radius: 25px;
     margin-bottom: 2%;
+}
+
+.card-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .row{
     width: 100%;
     margin-bottom: 1%;
-
 }
 
 .send {
@@ -124,16 +141,19 @@ export default {
     max-width: 60%;
 }
 
-.messages{
-    border-radius: 3%;
-}
-
-.right{
-    float: right;
-}
-
-.left {
+.btn-options {
     display: flex;
     flex-direction: row;
+}
+
+.text-muted{
+    font-style: italic;
+}
+.link {
+    color: #fd2d01;
+}
+
+.link:hover{
+    text-decoration: underline;
 }
 </style>

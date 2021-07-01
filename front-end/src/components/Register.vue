@@ -25,18 +25,6 @@
                   <input v-model="user_name" type="text" class="form-control" id="user_name" name="user_name" placeholder="Votre pseudo" required />
                 </div>
               </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label for="user_age">Age</label>
-                  <input v-model="user_age" type="number" class="form-control" id="user_age" name="user_age" placeholder="Votre age" required />
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="form-group">
-                  <label for="user_biography">Votre biographie</label>
-                  <textarea v-model="user_biography" type="text" class="form-control" id="user_biography" name="user_biography" placeholder="Votre biographie" />
-                </div>
-              </div>
             </div>
           </form>
         </div>
@@ -68,8 +56,6 @@ export default {
       user_email: null,
       user_password: null,
       user_name: null,
-      user_age: null,
-      user_biography: null,
       errMessage: "",
       successMessage: "",
     };
@@ -85,8 +71,6 @@ export default {
         users_email: this.user_email,
         users_password: this.user_password,
         users_name: this.user_name,
-        users_age: this.user_age,
-        users_biography: this.user_biography,
       })
       .then((response) => {
         that.errMessage = "";
@@ -116,9 +100,12 @@ export default {
 }
 
 .card{
-    border: 2px solid black;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(248, 242, 242);
     margin-bottom: 2%;
 }
+
 
 .bg-primary {
     background-color: #fd2d01 !important;

@@ -27,8 +27,8 @@ exports.selectUsersByEmail = () => {
 
 //CREATE USERS
 exports.creationUser = () => {
-    return `INSERT INTO users (users_email, users_password, users_name, users_age, users_biography)
-            VALUE (?, ?, ?, ?, ?)`;
+    return `INSERT INTO users (users_email, users_password, users_name)
+            VALUE (?, ?, ?)`;
 };
 
 //DELETE USERS
