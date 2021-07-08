@@ -72,6 +72,7 @@ header {
 
 .bg-orange {
     background-color: #ffd7d7;
+    border-bottom: 2px solid black;
 }
 
 

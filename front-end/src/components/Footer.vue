@@ -20,6 +20,16 @@ export default {
 <style scoped>
 .bg-orange {
   background-color: #ffd7d7;
+  border-top: 2px solid black;
+}
+
+.navbar-nav {
+  display: flex !important;
+  flex-direction: row !important; 
+}
+
+.nav-item {
+  justify-content: space-between !important;
 }
 
 .nav-link {

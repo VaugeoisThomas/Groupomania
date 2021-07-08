@@ -36,3 +36,14 @@ exports.deleteUsers = () =>  {
     return `DELETE FROM users
             WHERE users_id = ?`;
 };
+
+//UPDATE ACCOUNT
+exports.updateData = () => {
+    return `UPDATE users
+            SET 
+                users_name = ?,
+                users_password = ?,
+                users_email = ?,
+                isAdmin = ?
+            WHERE users_id = ?`;
+};

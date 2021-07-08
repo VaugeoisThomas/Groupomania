@@ -39,24 +39,41 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success" @click="deleteAccount">Supprimer mon compte</button>
+                        <button type="submit" class="btn btn-danger" @click="deleteAccount">Supprimer mon compte</button>
                     </div>
                 </div>
             </form>
         </section>
         <section v-show="modifyProfil">
-            <form @submit.prevent="modifyProfil(profil.users_id)" method="update">
+            <form @submit.prevent="modifyAccount(profil.users_id)" method="update" id="form-validation">
                 <div class="card ">
                     <div class="card-header bg-info">
                         <h2>Modification du profil</h2>
                     </div>
                     <div class="card-body">
-                        <div class="card-text">
-                            <p>Vous êtes sur le point de supprimer votre profil ! Cette action est irreversible !</p>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" v-model="user_email" placeholder="Adresse email" required />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" v-model="user_password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="user_name">Pseudo</label>
+                                    <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Votre pseudo" v-model="user_name" required />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success" @click="deleteAccount">Supprimer mon compte</button>
+                        <button type="submit" class="btn btn-success" @click="modifyAccount">Modifier mon compte</button>
                     </div>
                 </div>
             </form>
@@ -71,6 +88,9 @@ export default {
     name: "Profil",
     data(){
         return{
+            user_email: "",
+            user_password: "",
+            user_name: "",
             profil: [],
             userId: "",
             token: "",
@@ -88,7 +108,7 @@ export default {
         if(localStorage.userId){
             this.userId = localStorage.userId;
         }
-        if(localStorage.token){
+        if(localStorage.jwt){
             this.token = localStorage.jwt;    
         } 
         if(localStorage.isAdmin){
@@ -119,6 +139,31 @@ export default {
             }).catch(() => {
                 alert('Vous ne pouvez pas supprimer ce profil');
             })
+        },
+        modifyAccount(e){
+            if(e){
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            const configuration = {
+                headers: {
+                    Authorization: `Bearer ` + this.token,
+                }
+            };
+
+            axios.put("http://localhost:3000/api/users/" + this.userId + "/updateProfil", {
+                users_email: this.user_email,
+                users_password: this.user_password,
+                users_name: this.user_name,
+            }, 
+            configuration
+            )
+            .then(() =>{
+                window.location.reload();
+            })
+            .catch(() =>{
+                alert("Un problème interne est survenue");
+            })
         }
     }
 }
@@ -140,6 +185,11 @@ export default {
 .bg-orange{
     background-color: #fd2d01;
     color: white;
+}
+
+.bg-info{
+    background-color: #ffd7d7!important;
+    color: #fd2d01;
 }
 
 .card{
