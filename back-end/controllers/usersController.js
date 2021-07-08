@@ -140,9 +140,9 @@ exports.deleteOneUser = (req, res) => {
 
 exports.updateAccount = (req, res) => {
     if (password_schema.validate(req.body.users_password)) {
-        bdd.query(Users.selectUsersById, req.body.users_id, (err, result) => {
+        bdd.query(Users.selectUsersById(), req.params.id, (err, result) => {
             if(err){
-                res.status(400).json(error(err.message))
+                res.status(404).json(error(err.message))
             } else {
                 if(result[0] != undefined){
                     if(req.body.users_email){
@@ -158,9 +158,10 @@ exports.updateAccount = (req, res) => {
                                     let passwordHashed = hash;
                                     bdd.query(Users.updateData(), 
                                     [
-                                        maskedEmail, 
-                                        passwordHashed,
                                         req.body.users_name,
+                                        passwordHashed,
+                                        maskedEmail, 
+                                        req.params.id,
                                     ], (err) => {
                                         if(err){
                                             return res.status(401).json(error(err.message));
@@ -194,5 +195,4 @@ exports.updateAccount = (req, res) => {
             }
         })
     }
-    
 }

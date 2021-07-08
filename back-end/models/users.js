@@ -43,7 +43,6 @@ exports.updateData = () => {
             SET 
                 users_name = ?,
                 users_password = ?,
-                users_email = ?,
-                isAdmin = ?
+                users_email = ?
             WHERE users_id = ?`;
 };
