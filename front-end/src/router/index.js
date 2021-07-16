@@ -1,31 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../components/Home.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Home from '../components/Home.vue';
+import Register from '../components/Register';
+import Login from '../components/Login.vue';
+import Forum from '../components/Forum.vue';
 
 const routes = [
-  {
-    path: '/',
-    component: Home
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
-  },
-  {
-    path:'/login',
-    name:'Login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
-  },
-  {
-    path:'/profil/:id',
-    name:'Profil',
-    component: () => import(/* webpackChunkName: "profil" */ '../views/Profil.vue')
-  },
-  {
-    path:'/forum',
-    name:'Forum',
-    component: () => import(/* webpackChunkName: "forum" */ '../views/Forum.vue')
-  },
+  { path: '/', component: Home },
+  { path: '/register', component: Register },
+  { path:'/login', component: Login },
+  { path:'/profil/:id', name:'Profil', component: () => import(/* webpackChunkName: "profil" */ '../views/Profil.vue')},
+  { path:'/forum', component: Forum },
 ]
 
 const router = createRouter({

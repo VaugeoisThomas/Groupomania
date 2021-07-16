@@ -9,8 +9,14 @@ export default {
     <nav class="navbar navbar-expand-lg navbar-dark bg-orange">
       <div class="container-fluid">
         <ul class="navbar-nav me-auto my-lg-0">
-          <li class="nav-item"><a class="nav-link" href="/LegalNotice">Mentions légales</a></li>
-          <li class="nav-item"><a class="nav-link" href="mailto:contact@groupomania.com">Contactez-nous</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/LegalNotice">Mentions légales</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="mailto:contact@groupomania.com"
+              >Contactez-nous</a
+            >
+          </li>
         </ul>
       </div>
     </nav>
@@ -25,7 +31,7 @@ export default {
 
 .navbar-nav {
   display: flex !important;
-  flex-direction: row !important; 
+  flex-direction: row !important;
 }
 
 .nav-item {
@@ -35,5 +41,4 @@ export default {
 .nav-link {
   color: #fd2d01 !important;
 }
-
 </style>

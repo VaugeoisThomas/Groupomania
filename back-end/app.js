@@ -1,11 +1,12 @@
 const express = require('express');
 const bodyparser = require('body-parser');
 const helmet = require('helmet');
-const app = express();
-
 const users = require('./routes/usersRouter');
 const messages = require('./routes/messagesRouter');
+const compression = require('compression');
+const app = express();
 
+app.use(compression());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(helmet());

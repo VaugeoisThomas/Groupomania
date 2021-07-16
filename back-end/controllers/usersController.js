@@ -5,7 +5,6 @@ const { error, success } = require("../middleware/error-management");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const MaskData = require('maskdata');
-const { maskEmail2 } = require('maskdata/lib/emailMask/EmailMask');
 
 exports.createUser = (req, res) => {
     if (password_schema.validate(req.body.users_password)) {
