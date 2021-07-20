@@ -20,3 +20,17 @@ At this point you installed all the different files you could execute following 
 2. On front-end terminal you have to execute `npm run server`
 3. On back-end terminal you have to execute  `nodemon server.js`
 4. Finally, open your browser and you should go to [localhost](http://localhost:8080/)
+
+## On the website
+
+You could create an account to testing fonctionnalities.
+
+You may have a strong password :
+* minimum 8 characteres
+* contains one capital letter
+* have two numbers   
+
+You can write a message, or comment, or like / dislike other messages.
+You can modify your account, delete your account.
+
+Enjoy your visit.
