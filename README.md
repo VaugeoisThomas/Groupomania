@@ -2,7 +2,8 @@
 
 Welcome to groupomania repository !
 
-If you want to start servers you should do like below !
+## Installation
+
 
 1. Clone the repository
 2. Execute the following command on your terminal
