@@ -5,8 +5,7 @@ CREATE TABLE `users` (
   `users_name` varchar(30) NOT NULL DEFAULT '',
   `users_password` varchar(64) NOT NULL,
   `users_email` varchar(30) NOT NULL UNIQUE,
-  `users_age` int DEFAULT 0,
-  `users_biography` text
+  `isAdmin` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `users` WRITE;
@@ -18,7 +17,7 @@ CREATE TABLE `messages` (
   `messages_id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `messages_text` text NOT NULL,
   `users_id` int unsigned NOT NULL,
-  `createdAt` date NOT NULL,
+  `createdAt` datetime NOT NULL,
   CONSTRAINT `fk_user_message` FOREIGN KEY (`users_id`) REFERENCES `users` (`users_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

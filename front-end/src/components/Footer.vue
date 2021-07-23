@@ -6,7 +6,7 @@ export default {
 
 <template>
   <footer>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-orange">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-blue">
       <div class="container-fluid">
         <ul class="navbar-nav me-auto my-lg-0">
           <li class="nav-item">
@@ -24,8 +24,10 @@ export default {
 </template>
 
 <style scoped>
-.bg-orange {
-  background-color: #ffd7d7;
+
+
+.bg-blue {
+  background-color: rgb(26,45,75);
   border-top: 2px solid black;
 }
 
@@ -39,6 +41,7 @@ export default {
 }
 
 .nav-link {
-  color: #fd2d01 !important;
+  color: rgb(212,207,207) !important;
 }
+
 </style>

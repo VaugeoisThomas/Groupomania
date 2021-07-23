@@ -1,10 +1,10 @@
 const Messages = require('../models/messages');
 const bdd = require('../models/dbConnect');
-const { error, success } = require('../middleware/error-management');
+const errManagement = require('../middleware/error-management');
 
 exports.getAllMessages = (req, res) => {
     bdd.query(Messages.getAllMessages(), (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             return res.status(201).json(result)
@@ -14,16 +14,16 @@ exports.getAllMessages = (req, res) => {
 
 exports.deleteMessage = (req, res) => {
     bdd.query(Messages.selectMessageById(), req.params.id, (err, result) => {
-        if(err){
+        if (err) {
             throw err;
         } else {
-            if(result[0] != undefined){
-                if(req.params.id == result[0].messages_id){
+            if (result[0] != undefined) {
+                if (req.params.id == result[0].messages_id) {
                     bdd.query(Messages.deleteMessage(), req.params.id, (err, result) => {
-                        if(err){
+                        if (err) {
                             throw err;
                         } else {
-                            return res.status(200).json(success(result));
+                            return res.status(200).json(errManagement.success(result));
                         }
                     });
                 } else {
@@ -37,14 +37,16 @@ exports.deleteMessage = (req, res) => {
 };
 
 exports.addMessage = (req, res) => {
-    bdd.query(Messages.addMessage(), [ 
+    bdd.query(Messages.addMessage(), [
         req.body.messages_text,
         req.body.users_id,
-    ],(err, result) => {
-        if(err){
-            return res.status(500).json(error(err.message));
+    ], (err, result) => {
+        if (err) {
+            return res.status(500).json(errManagement.error(err.message));
         } else {
-            return res.status(201).json(success("Message envoyé", result));
+            return res.status(201).json(errManagement.success("Message envoyé", result));
         }
     });
 };
+
+exports.addLikes = (req, res) => {}

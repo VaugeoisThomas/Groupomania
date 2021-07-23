@@ -26,12 +26,12 @@ export default {
 
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-orange">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-blue">
       <div class="container-fluid">
         <a href="/" class="navbar-brand"
           ><img
             class="logo"
-            src="../assets/icon-logo.png"
+            src="../assets/groupomania-white.png"
             width="150"
             height="200"
             alt="Groupomania logo"
@@ -88,7 +88,7 @@ export default {
               placeholder="Search"
               aria-label="Search"
             />
-            <button class="btn btn-outline-dark" type="submit">
+            <button class="btn btn-outline-success" type="submit">
               Rechercher
             </button>
           </form>
@@ -113,15 +113,15 @@ nav {
 }
 
 .nav-link {
-  color: #fd2d01;
+  color: rgba(122,76,81,255);
   background-color: white;
   margin-right: 5%;
-  border: 1px solid #fd2d01 !important;
+  border: 1px solid rgb(89,93,100) !important;
   border-radius: 10px !important;
 }
 
-.bg-orange {
-  background-color: #ffd7d7;
+.bg-blue {
+  background-color: rgb(26,45,75);
   border-bottom: 2px solid black;
 }
 </style>

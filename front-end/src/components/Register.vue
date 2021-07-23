@@ -67,14 +67,14 @@
             </button>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row md-12">
-      <div v-if="errMessage" class="alert alert-danger">
-        {{ errMessage }}
-      </div>
-      <div v-if="successMessage" class="alert alert-success">
-        {{ successMessage }}
+        <div class="row">
+          <div v-if="errMessage" class="alert alert-danger">
+            {{ errMessage }}
+          </div>
+          <div v-if="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -94,33 +94,35 @@ export default {
     };
   },
   methods: {
-    registration(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
+    registration() {
+      let form = document.querySelector("#form-validation");
       var that = this;
-      axios
-        .post("http://localhost:3000/api/users", {
-          users_email: this.user_email,
-          users_password: this.user_password,
-          users_name: this.user_name,
-        })
-        .then((response) => {
-          that.errMessage = "";
-          that.successMessage =
-            "Inscription effectuée avec succés ! Bienvenue sur notre site !";
-          localStorage.setItem("jwt", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          localStorage.setItem("isAdmin", response.data.isAdmin);
-          response.headers = {
-            Authorization: "Bearer " + response.data.token,
-          };
-          window.location.href = "/forum";
-        })
-        .catch(() => {
-          that.errMessage = "L'email est déjà utilisé";
-        });
+      if (form.checkValidity(event) === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.classList.add("notOk");
+      } else {
+        form.classList.add("ok");
+        axios
+          .post("http://localhost:3000/api/users", {
+            users_email: this.user_email,
+            users_password: this.user_password,
+            users_name: this.user_name,
+          })
+          .then((response) => {
+            that.successMessage = response.data.message
+            localStorage.setItem("jwt", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("isAdmin", response.data.isAdmin);
+            response.headers = {
+              Authorization: "Bearer " + response.data.token,
+            };
+            window.location.href = "/forum";
+          })
+          .catch((err) => {
+            that.errMessage = err.response.data.message;
+          });
+      }
     },
   },
 };
@@ -131,22 +133,38 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  height: 78.6vh;
+  height: 76.5vh;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
 }
 
 .card {
   border: none;
   border-radius: 10px;
   background-color: rgb(248, 242, 242);
-  margin-bottom: 2%;
+}
+
+.card-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .bg-primary {
-  background-color: #fd2d01 !important;
+  background-color: rgb(26,45,75) !important;
   color: white;
 }
 
 .card-title {
   text-align: center;
 }
+
+.ok {
+  border: 1px solid green;
+}
+
+.notOk {
+  border: 1px solid red;
+}
+
 </style>

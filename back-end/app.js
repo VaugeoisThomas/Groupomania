@@ -3,6 +3,7 @@ const bodyparser = require('body-parser');
 const helmet = require('helmet');
 const users = require('./routes/usersRouter');
 const messages = require('./routes/messagesRouter');
+const comments = require('./routes/commentsRouter');
 const compression = require('compression');
 const app = express();
 
@@ -20,5 +21,6 @@ app.use((req, res, next) => {
 
 app.use("/api/users", users);
 app.use("/api/forum", messages);
+app.use("/api/comments", comments);
 
 module.exports = app;

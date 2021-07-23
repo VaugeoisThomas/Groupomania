@@ -26,8 +26,27 @@
           </div>
           <div class="card-footer">
             <div class="btn-options">
-              <p>J'aime / J'aime pas</p>
-              <p>commentaires</p>
+              <button
+                type="submit"
+                class="btn btn-outline-secondary"
+                @click="like(message.messages_id)"
+              >
+                <i class="far fa-thumbs-up"></i>
+              </button>
+              <button
+                type="submit"
+                class="btn btn-outline-secondary"
+                @click="dislike(message.messages_id)"
+              >
+                <i class="far fa-thumbs-down"></i>
+              </button>
+              <button
+                type="submit"
+                class="btn btn-outline-secondary"
+                @click="comment(message.messages_id)"
+              >
+                <i class="fas fa-comments"></i>
+              </button>
             </div>
             <button
               class="btn btn-danger"
@@ -50,13 +69,21 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div v-if="errMessage" class="alert alert-danger">
+        {{ errMessage }}
+      </div>
+      <div v-if="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import moment from "moment";
-//moment.locale("fr");
+moment.locale("fr");
 
 export default {
   name: "Forum",
@@ -67,6 +94,8 @@ export default {
       isAdmin: "",
       authenticate: "",
       message_text: "",
+      successMessage: "",
+      errMessage: "",
     };
   },
   created() {
@@ -75,8 +104,8 @@ export default {
       .then((response) => {
         this.messages = response.data;
       })
-      .catch(() => {
-        alert("Un problème est survenu ! Merci de réessayer ultérieurement !");
+      .catch((err) => {
+        this.errMessage = err.response.data.message;
       });
   },
   mounted() {
@@ -89,12 +118,13 @@ export default {
   },
   methods: {
     dateTranslation(date) {
-      return moment(date, "YYYY-MM-DD", "fr").format("DD-MM-YYYY");
+      return moment(date).format(" Do/MM/YYYY");
     },
 
     getTime(date) {
-      return moment(date, "HH-MM-SS").format("LT");
+      return moment(date).format("LTS");
     },
+
     deleteMessage(message_id) {
       const configuration = {
         headers: {
@@ -106,8 +136,8 @@ export default {
         .then(() => {
           window.location.reload();
         })
-        .catch(() => {
-          alert("Vous ne pouvez pas supprimer ce message ! ");
+        .catch((err) => {
+          this.errMessage = err.response.data.message
         });
     },
     addMessage(e) {
@@ -120,15 +150,25 @@ export default {
           messages_text: this.message_text,
           users_id: this.userId,
         })
-        .then(() => {
+        .then((response) => {
+          this.successMessage = response.data.result
           window.location.reload();
         })
-        .catch(() => {
-          alert("Un problème est survenue durant l'envoie du message");
+        .catch((err) => {
+          this.errMessage = err.response.data.message;
         });
     },
     goProfil(id) {
       this.$router.push({ name: "Profil", params: { id: id } });
+    },
+    like(id) {
+      alert("J'aime le message " + id);
+    },
+    dislike(id) {
+      alert("Je n'aime le message " + id);
+    },
+    comment(id) {
+      alert("Je commente le message " + id);
     },
   },
 };
@@ -141,7 +181,7 @@ export default {
 }
 
 .card {
-  box-shadow: -12px 12px 10px 0px #ffd7d7 !important;
+  box-shadow: -12px 12px 10px 0px rgb(89,93,100) !important;
   border: 2px solid black;
   border-radius: 25px;
   margin-bottom: 2%;
@@ -167,15 +207,15 @@ export default {
 .btn-options {
   display: flex;
   flex-direction: row;
-  margin-right: 1%;
 }
 
 .text-muted {
   font-style: italic;
 }
 
-.link {
-  color: #fd2d01;
+.link,
+.btn-outline-secondary {
+  color: rgb(26,45,75) !important;
 }
 
 .link:hover {

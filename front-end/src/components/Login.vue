@@ -5,7 +5,7 @@
         <h1 class="card-title text-uppercase">Connexion</h1>
       </div>
       <div class="card-body">
-        <form method="post" @submit="login">
+        <form method="post" id="form-validation">
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">
@@ -16,10 +16,8 @@
                   class="form-control"
                   id="email"
                   name="email"
-                  placeholder="Adresse email"
                   required
                 />
-                <div class="error">Merci de saisir un email valide</div>
               </div>
             </div>
             <div class="col-sm-12">
@@ -31,33 +29,36 @@
                   class="form-control"
                   id="password"
                   name="password"
-                  placeholder="Mot de passe"
-                  required
                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                  required
                 />
-                <div class="error">
-                  Votre mot de passe doit contenir minimum 8 caractères dont une
-                  majuscule et un chiffre
-                </div>
               </div>
             </div>
-            <div class="col-sm-6 col-md-6 mt-2"></div>
           </div>
         </form>
       </div>
       <div class="card-footer">
-        <button
-          class="btn btn-secondary"
-          id="submit"
-          value="submit"
-          type="submit"
-        >
-          Connexion
-        </button>
-      </div>
-      <div v-if="errMessage" class="alert alert-danger">{{ errMessage }}</div>
-      <div v-if="successMessage" class="alert alert-success">
-        {{ successMessage }}
+        <div class="row">
+          <div class="col-sm-12 col-md-12 mt-2">
+            <button
+              @click="login()"
+              class="btn btn-secondary"
+              id="submit"
+              value="submit"
+              type="submit"
+            >
+              Connexion
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div v-if="errMessage" class="alert alert-danger">
+            {{ errMessage }}
+          </div>
+          <div v-if="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -77,30 +78,35 @@ export default {
     };
   },
   methods: {
-    login(e) {
-      if (e) {
-        e.preventDefault();
-      }
+    login() {
       var that = this;
-      axios
-        .post("http://localhost:3000/api/users/login", {
-          users_email: this.user_email,
-          users_password: this.user_password,
-        })
-        .then((response) => {
-          that.errMessage = "";
-          that.successMessage = "Connexion réussie !";
-          localStorage.setItem("jwt", response.data.token);
-          localStorage.setItem("userId", response.data.userId);
-          localStorage.setItem("isAdmin", response.data.isAdmin);
-          response.headers = {
-            Authorization: "Bearer " + response.data.token,
-          };
-          window.location.href = "/forum";
-        })
-        .catch(() => {
-          that.errMessage = "Utilisateur non reconnu !";
-        });
+      var form = document.querySelector("#form-validation")
+      if (form.checkValidity(event) === false) {
+        event.preventDefault();
+        event.stopPropagation();
+        form.classList.add("notOk");
+
+      } else {
+        form.classList.add("ok");
+        axios
+          .post("http://localhost:3000/api/users/login", {
+            users_email: this.user_email,
+            users_password: this.user_password,
+          })
+          .then((response) => {
+            that.successMessage = response.data.message;
+            localStorage.setItem("jwt", response.data.token);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("isAdmin", response.data.isAdmin);
+            response.headers = {
+              Authorization: "Bearer " + response.data.token,
+            };
+            window.location.href = "/forum";
+          })
+          .catch((err) => {
+            that.errMessage = err.response.data.message;
+          });
+      }
     },
   },
 };
@@ -110,8 +116,9 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  height: 78.6vh;
-  margin-bottom: 1%;
+  height: 76.5vh;
+  margin-top: 0.5%;
+  margin-bottom: 0.5%;
 }
 
 .card {
@@ -120,8 +127,14 @@ export default {
   background-color: rgb(248, 242, 242);
 }
 
+.card-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .bg-primary {
-  background-color: #fd2d01 !important;
+  background-color: rgb(26,45,75) !important;
   color: white;
 }
 
@@ -131,5 +144,9 @@ export default {
 
 .ok {
   border: 1px solid green;
+}
+
+.notOk {
+  border: 1px solid red;
 }
 </style>

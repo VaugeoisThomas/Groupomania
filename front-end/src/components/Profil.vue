@@ -3,7 +3,7 @@
     <section>
       <div class="row">
         <div class="card">
-          <card class="card-header bg-orange">
+          <card class="card-header bg-blue">
             <h1>Profil de {{ profil.users_name }}</h1>
           </card>
           <div class="card-body">
@@ -241,14 +241,14 @@ export default {
   margin: 0 auto !important;
 }
 
-.bg-orange {
-  background-color: #fd2d01;
+.bg-blue {
+  background-color: rgb(26,45,75);
   color: white;
 }
 
 .bg-info {
-  background-color: #ffd7d7 !important;
-  color: #fd2d01;
+  background-color: rgb(89,93,100) !important;
+  color: white;
 }
 
 .card {
@@ -265,8 +265,8 @@ export default {
 }
 
 .btn-info {
-  background-color: #ffd7d7;
-  color: #fd2d01;
+  background-color: rgb(89,93,100);
+  color: white;
   border: none;
   margin-left: 1%;
 }
