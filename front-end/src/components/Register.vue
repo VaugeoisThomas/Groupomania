@@ -11,7 +11,7 @@
               <div class="form-group">
                 <label for="email">Email</label>
                 <input
-                  v-model="user_email"
+                  v-model="email"
                   type="email"
                   class="form-control"
                   id="email"
@@ -25,7 +25,7 @@
               <div class="form-group">
                 <label for="password">Password</label>
                 <input
-                  v-model="user_password"
+                  v-model="password"
                   type="password"
                   class="form-control"
                   id="password"
@@ -40,7 +40,7 @@
               <div class="form-group">
                 <label for="user_name">Pseudo</label>
                 <input
-                  v-model="user_name"
+                  v-model="name"
                   type="text"
                   class="form-control"
                   id="user_name"
@@ -86,17 +86,28 @@ export default {
   name: "Register",
   data() {
     return {
-      user_email: null,
-      user_password: null,
-      user_name: null,
+      email: null,
+      password: null,
+      name: null,
       errMessage: "",
       successMessage: "",
     };
   },
   methods: {
     registration() {
-      let form = document.querySelector("#form-validation");
-      var that = this;
+      let form = document.querySelector("#form-validation"),
+        that = this,
+        email_form = document.querySelector("#email"),
+        password_form = document.querySelector("#password");
+
+      if (email_form === "" || email_form === null) {
+        that.errMessage = "Veuillez entrer un email valide";
+      }
+
+      if (password_form === "" || password_form === null) {
+        that.errMessage = "Veuillez entrer un password valide";
+      }
+
       if (form.checkValidity(event) === false) {
         event.preventDefault();
         event.stopPropagation();
@@ -104,16 +115,16 @@ export default {
       } else {
         form.classList.add("ok");
         axios
-          .post("http://localhost:3000/api/users", {
-            users_email: this.user_email,
-            users_password: this.user_password,
-            users_name: this.user_name,
+          .post("http://localhost:3000/api/user", {
+            email: this.email,
+            password: this.password,
+            name: this.name,
           })
           .then((response) => {
-            that.successMessage = response.data.message
+            that.successMessage = response.data.message;
             localStorage.setItem("jwt", response.data.token);
             localStorage.setItem("userId", response.data.userId);
-            localStorage.setItem("isAdmin", response.data.isAdmin);
+            localStorage.setItem("is_admin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };
@@ -151,7 +162,7 @@ export default {
 }
 
 .bg-primary {
-  background-color: rgb(26,45,75) !important;
+  background-color: rgb(26, 45, 75) !important;
   color: white;
 }
 
@@ -166,5 +177,4 @@ export default {
 .notOk {
   border: 1px solid red;
 }
-
 </style>

@@ -24,10 +24,8 @@ export default {
 </template>
 
 <style scoped>
-
-
 .bg-blue {
-  background-color: rgb(26,45,75);
+  background-color: rgb(26, 45, 75);
   border-top: 2px solid black;
 }
 
@@ -41,7 +39,6 @@ export default {
 }
 
 .nav-link {
-  color: rgb(212,207,207) !important;
+  color: rgb(212, 207, 207) !important;
 }
-
 </style>

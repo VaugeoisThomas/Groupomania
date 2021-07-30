@@ -1,26 +1,26 @@
-const express = require('express');
-const bodyparser = require('body-parser');
-const helmet = require('helmet');
-const users = require('./routes/usersRouter');
-const messages = require('./routes/messagesRouter');
-const comments = require('./routes/commentsRouter');
-const compression = require('compression');
-const app = express();
+const EXPRESS = require('express');
+const BODYPARSER = require('body-parser');
+const HELMET = require('helmet');
+const USER = require('./routes/userRouter');
+const MESSAGE = require('./routes/messageRouter');
+const COMMENT = require('./routes/commentRouter');
+const COMPRESSION = require('compression');
+const APP = EXPRESS();
 
-app.use(compression());
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended: false}));
-app.use(helmet());
+APP.use(COMPRESSION());
+APP.use(BODYPARSER.json());
+APP.use(BODYPARSER.urlencoded({ extended: false }));
+APP.use(HELMET());
 
-app.use((req, res, next) => {
+APP.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
 
-app.use("/api/users", users);
-app.use("/api/forum", messages);
-app.use("/api/comments", comments);
+APP.use("/api/user", USER);
+APP.use("/api/forum", MESSAGE);
+APP.use("/api/comment", COMMENT);
 
-module.exports = app;
+module.exports = APP;

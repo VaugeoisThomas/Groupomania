@@ -5,44 +5,45 @@ exports.selectAllUsers = () => {
 };
 
 // SELECTION BY USERS_ID
-exports.selectUsersById = () => {
+exports.selectUserById = () => {
     return `SELECT * 
             FROM users
-            WHERE users_id = ?`;
+            WHERE id = ?`;
 };
 
 //SELECTION BY USERS_NAME
-exports.selectUsersByUserName = () => {
+exports.selectUserByUserName = () => {
     return `SELECT * 
             FROM users
-            WHERE users_name = ?`;
+            WHERE name = ?`;
 };
 
 //SELECTION BY USERS_NAME
-exports.selectUsersByEmail = () => {
+exports.selectUserByEmail = () => {
     return `SELECT * 
             FROM users
-            WHERE users_email = ?`;
+            WHERE email = ?`;
 };
 
 //CREATE USERS
 exports.creationUser = () => {
-    return `INSERT INTO users (users_email, users_password, users_name)
-            VALUE (?, ?, ?)`;
+    return `INSERT INTO users (email, password, name, is_admin)
+            VALUE (?, ?, ?, 0)`;
 };
 
 //DELETE USERS
-exports.deleteUsers = () =>  {
+exports.deleteUser = () => {
     return `DELETE FROM users
-            WHERE users_id = ?`;
+            WHERE id = ?`;
 };
 
 //UPDATE ACCOUNT
 exports.updateData = () => {
     return `UPDATE users
             SET 
-                users_name = ?,
-                users_password = ?,
-                users_email = ?
-            WHERE users_id = ?`;
+                name = ?,
+                password = ?,
+                email = ?,
+                is_admin = 0;
+            WHERE id = ?`;
 };

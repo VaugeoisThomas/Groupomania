@@ -4,33 +4,33 @@
       <div class="row">
         <div class="card">
           <card class="card-header bg-blue">
-            <h1>Profil de {{ profil.users_name }}</h1>
+            <h1>Profil de {{ profil.name }}</h1>
           </card>
           <div class="card-body">
             <div class="card-text">
-              <p>Pseudo: {{ profil.users_name }}</p>
+              <p>Pseudo: {{ profil.name }}</p>
             </div>
             <div class="card-text">
-              <p>Email: {{ profil.users_email }}</p>
+              <p>Email: {{ profil.email }}</p>
             </div>
             <div class="card-text">
               <p>
                 Admin :
-                <span v-if="isAdmin == 1 || profil.isAdmin == 1">Oui</span>
+                <span v-if="is_admin == 1 || profil.is_admin == 1">Oui</span>
                 <span v-else>Non </span>
               </p>
             </div>
           </div>
           <div class="card-footer">
             <button
-              v-if="isAdmin == 1 || profil.users_id == userId"
+              v-if="is_admin == 1 || profil.id == userId"
               class="btn btn-danger"
               @click="deleteProfil = !deleteProfil"
             >
               Supprimer son compte
             </button>
             <button
-              v-if="isAdmin == 1 || profil.users_id == userId"
+              v-if="isAdmin == 1 || profil.id == userId"
               class="btn btn-info"
               @click="modifyProfil = !modifyProfil"
             >
@@ -41,7 +41,7 @@
       </div>
     </section>
     <section v-show="deleteProfil">
-      <form @submit.prevent="deleteAccount(profil.users_id)" method="delete">
+      <form @submit.prevent="deleteAccount(profil.id)" method="delete">
         <div class="card">
           <div class="card-header bg-danger">
             <h2>Attention</h2>
@@ -64,7 +64,7 @@
     </section>
     <section v-show="modifyProfil">
       <form
-        @submit.prevent="modifyAccount(profil.users_id)"
+        @submit.prevent="modifyAccount(profil.id)"
         method="update"
         id="form-validation"
       >
@@ -82,7 +82,7 @@
                     class="form-control"
                     id="email"
                     name="email"
-                    v-model="user_email"
+                    v-model="email"
                     placeholder="Adresse email"
                     required
                   />
@@ -97,7 +97,7 @@
                     id="password"
                     name="password"
                     placeholder="Mot de passe"
-                    v-model="user_password"
+                    v-model="password"
                     required
                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
                   />
@@ -105,14 +105,14 @@
               </div>
               <div class="col-sm-12">
                 <div class="form-group">
-                  <label for="user_name">Pseudo</label>
+                  <label for="name">Pseudo</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="user_name"
-                    name="user_name"
+                    id="name"
+                    name="name"
                     placeholder="Votre pseudo"
-                    v-model="user_name"
+                    v-model="name"
                     required
                   />
                 </div>
@@ -141,9 +141,9 @@ export default {
   name: "Profil",
   data() {
     return {
-      user_email: "",
-      user_password: "",
-      user_name: "",
+      email: "",
+      password: "",
+      name: "",
       profil: [],
       userId: "",
       token: "",
@@ -164,16 +164,16 @@ export default {
     if (localStorage.jwt) {
       this.token = localStorage.jwt;
     }
-    if (localStorage.isAdmin) {
-      this.isAdmin = localStorage.isAdmin;
+    if (localStorage.is_admin) {
+      this.is_admin = localStorage.is_admin;
     }
   },
   methods: {
     findUser() {
       axios
-        .get(`http://localhost:3000/api/users/${this.$route.params.id}`)
+        .get(`http://localhost:3000/api/user/${this.$route.params.id}`)
         .then((response) => {
-          this.profil = response.data;
+          this.profil = response.data.result;
         })
         .catch(() => {
           alert(
@@ -188,7 +188,7 @@ export default {
         },
       };
       axios
-        .delete("http://localhost:3000/api/users/" + this.userId, configuration)
+        .delete("http://localhost:3000/api/user/" + this.userId, configuration)
         .then(() => {
           localStorage.clear();
           window.location.href = "/";
@@ -210,11 +210,11 @@ export default {
 
       axios
         .put(
-          "http://localhost:3000/api/users/" + this.userId + "/updateProfil",
+          "http://localhost:3000/api/user/" + this.userId + "/updateProfil",
           {
-            users_email: this.user_email,
-            users_password: this.user_password,
-            users_name: this.user_name,
+            email: this.email,
+            password: this.password,
+            name: this.name,
           },
           configuration
         )
@@ -242,12 +242,12 @@ export default {
 }
 
 .bg-blue {
-  background-color: rgb(26,45,75);
+  background-color: rgb(26, 45, 75);
   color: white;
 }
 
 .bg-info {
-  background-color: rgb(89,93,100) !important;
+  background-color: rgb(89, 93, 100) !important;
   color: white;
 }
 
@@ -265,7 +265,7 @@ export default {
 }
 
 .btn-info {
-  background-color: rgb(89,93,100);
+  background-color: rgb(89, 93, 100);
   color: white;
   border: none;
   margin-left: 1%;

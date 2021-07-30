@@ -1,43 +1,41 @@
-const http = require('http');
-const app = require('./app');
+const HTTP = require('http');
+const APP = require('./app');
 
-const normalizePort = (val) => {
-    const port = parseInt(val, 10);
+const NORMALIZE_PORT = (val) => {
+    const PORT = parseInt(val, 10);
 
-    if(isNaN(port)) return val;
-    if(port >= 0) return port;
+    if (isNaN(PORT)) return val;
+    if (PORT >= 0) return PORT;
     return false;
 }
 
-const port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+const PORT = NORMALIZE_PORT(process.env.PORT || '3000');
+APP.set('port', PORT);
 
 const errorHandler = (error) => {
-    if(error.syscall !== 'listen') throw error;
+    if (error.syscall !== 'listen') throw error;
 
-    const address = server.address();
-    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
+    const ADRESS = server.address();
+    const BIND = typeof ADRESS === 'string' ? 'pipe ' + ADRESS : 'port: ' + PORT;
 
-    switch(error.code){
+    switch (error.code) {
         case 'EACCESS':
-            console.log(bind + ' requires elevated privileges.');
+            console.log(BIND + ' requires elevated privileges.');
             process.exit(1);
-            break;
         case 'EADDRINUSE':
-            console.log(bind + ' is already used.');
+            console.log(BIND + ' is already used.');
             process.exit(1);
-            break;
         default:
             throw error;
     }
 };
 
-const server = http.createServer(app);
-server.on('error', errorHandler);
-server.on('listening', () => {
-    const address = server.address()
-    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
-    console.log('Listening on ' + bind)
+const SERVER = HTTP.createServer(APP);
+SERVER.on('error', errorHandler);
+SERVER.on('listening', () => {
+    const ADRESS = SERVER.address()
+    const BIND = typeof ADRESS === 'string' ? 'pipe ' + ADRESS : 'port: ' + PORT;
+    console.log('Listening on ' + BIND)
 });
 
-server.listen(port);
+SERVER.listen(PORT);

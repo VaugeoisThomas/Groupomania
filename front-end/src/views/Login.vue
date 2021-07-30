@@ -1,17 +1,16 @@
 <template>
-  <div class='main'>
+  <div class="main">
     <Login />
   </div>
 </template>
 
 <script>
-
-import Login from '@/components/Login'
+import Login from "@/components/Login";
 
 export default {
-  name: 'login',
+  name: "login",
   components: {
-    Login
-  }
-}
+    Login,
+  },
+};
 </script>

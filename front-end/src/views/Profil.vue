@@ -1,17 +1,16 @@
 <template>
-  <div class='main'>
+  <div class="main">
     <Profil />
   </div>
 </template>
 
 <script>
-
-import Profil from '@/components/Profil'
+import Profil from "@/components/Profil";
 
 export default {
-  name: 'profil',
+  name: "profil",
   components: {
-    Profil
-  }
-}
+    Profil,
+  },
+};
 </script>

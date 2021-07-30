@@ -11,7 +11,7 @@
               <div class="form-group">
                 <label for="email">Email</label>
                 <input
-                  v-model="user_email"
+                  v-model="email"
                   type="email"
                   class="form-control"
                   id="email"
@@ -24,7 +24,7 @@
               <div class="form-group">
                 <label for="password">Password</label>
                 <input
-                  v-model="user_password"
+                  v-model="password"
                   type="password"
                   class="form-control"
                   id="password"
@@ -71,33 +71,43 @@ export default {
   name: "Login",
   data() {
     return {
-      user_email: null,
-      user_password: null,
+      email: null,
+      password: null,
       errMessage: "",
       successMessage: "",
     };
   },
   methods: {
     login() {
-      var that = this;
-      var form = document.querySelector("#form-validation")
+      var that = this,
+        form = document.querySelector("#form-validation"),
+        email_form = document.querySelector("#email"),
+        password_form = document.querySelector("#password");
+
+      if (email_form === "" || email_form === null) {
+        that.errMessage = "Veuillez entrer un email valide";
+      }
+
+      if (password_form === "" || password_form === null) {
+        that.errMessage = "Veuillez entrer un password valide";
+      }
+
       if (form.checkValidity(event) === false) {
         event.preventDefault();
         event.stopPropagation();
         form.classList.add("notOk");
-
       } else {
         form.classList.add("ok");
         axios
-          .post("http://localhost:3000/api/users/login", {
-            users_email: this.user_email,
-            users_password: this.user_password,
+          .post("http://localhost:3000/api/user/login", {
+            email: this.email,
+            password: this.password,
           })
           .then((response) => {
             that.successMessage = response.data.message;
             localStorage.setItem("jwt", response.data.token);
             localStorage.setItem("userId", response.data.userId);
-            localStorage.setItem("isAdmin", response.data.isAdmin);
+            localStorage.setItem("is_admin", response.data.is_admin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };
@@ -134,7 +144,7 @@ export default {
 }
 
 .bg-primary {
-  background-color: rgb(26,45,75) !important;
+  background-color: rgb(26, 45, 75) !important;
   color: white;
 }
 

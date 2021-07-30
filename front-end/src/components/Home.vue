@@ -10,7 +10,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .container {
   width: 100%;
@@ -25,8 +24,8 @@ export default {
   animation: slide-in-fwd-bottom 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   font-size: 150px;
   text-align: center;
-  color: rgb(99,110,128);
-  text-shadow: 0 5px rgb(89,93,100);
+  color: rgb(99, 110, 128);
+  text-shadow: 0 5px rgb(89, 93, 100);
 }
 
 @keyframes slide-in-fwd-bottom {

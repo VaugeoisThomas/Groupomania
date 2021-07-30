@@ -113,15 +113,15 @@ nav {
 }
 
 .nav-link {
-  color: rgba(122,76,81,255);
+  color: rgba(122, 76, 81, 255);
   background-color: white;
   margin-right: 5%;
-  border: 1px solid rgb(89,93,100) !important;
+  border: 1px solid rgb(89, 93, 100) !important;
   border-radius: 10px !important;
 }
 
 .bg-blue {
-  background-color: rgb(26,45,75);
+  background-color: rgb(26, 45, 75);
   border-bottom: 2px solid black;
 }
 </style>

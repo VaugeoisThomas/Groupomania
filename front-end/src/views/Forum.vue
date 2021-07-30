@@ -1,17 +1,16 @@
 <template>
-  <div class='main'>
-    <Forum />  
+  <div class="main">
+    <Forum />
   </div>
 </template>
 
 <script>
-
-import Forum from '@/components/Forum'
+import Forum from "@/components/Forum";
 
 export default {
-  name: 'forum',
+  name: "forum",
   components: {
-    Forum
+    Forum,
   },
-}
+};
 </script>
