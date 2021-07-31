@@ -1,9 +1,9 @@
-const PASSWORD = require("password-validator");
-const SCHEMA = new PASSWORD();
+const Password = require("Password-validator");
+const Schema = new Password();
 
-SCHEMA.is().min(8)
+Schema.is().min(8)
       .has().uppercase(1)
       .has().lowercase()
       .has().digits(1);
 
-module.exports = SCHEMA;
+module.exports = Schema;

@@ -1,5 +1,5 @@
-const EXPRESS = require("express");
-const ROUTER = EXPRESS.Router();
+const Express = require("Express");
+const ROUTER = Express.Router();
 const MESSAGE = require('../controllers/messageController');
 
 ROUTER.get('/', MESSAGE.getAllMessages);
