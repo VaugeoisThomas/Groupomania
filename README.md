@@ -30,7 +30,7 @@ You may have a strong password :
 * contains one capital letter
 * have two numbers   
 
-You can write a message, or comment, or like / dislike other messages.
+You can write a message.
 You can modify your account, delete your account.
 
 Enjoy your visit.
