@@ -1,41 +1,41 @@
-const HTTP = require('http');
-const APP = require('./app');
+const Http = require('http');
+const App = require('./app');
 
-const NORMALIZE_PORT = (val) => {
-    const PORT = parseInt(val, 10);
+const Normalize_port = (val) => {
+    const port = parseInt(val, 10);
 
-    if (isNaN(PORT)) return val;
-    if (PORT >= 0) return PORT;
+    if (isNaN(port)) return val;
+    if (port >= 0) return port;
     return false;
 }
 
-const PORT = NORMALIZE_PORT(process.env.PORT || '3000');
-APP.set('port', PORT);
+const port = Normalize_port(process.env.PORT || '3000');
+App.set('port', port);
 
 const errorHandler = (error) => {
     if (error.syscall !== 'listen') throw error;
 
-    const ADRESS = server.address();
-    const BIND = typeof ADRESS === 'string' ? 'pipe ' + ADRESS : 'port: ' + PORT;
+    const address = server.address();
+    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
 
     switch (error.code) {
         case 'EACCESS':
-            console.log(BIND + ' requires elevated privileges.');
+            console.log(bind + ' requires elevated privileges.');
             process.exit(1);
         case 'EADDRINUSE':
-            console.log(BIND + ' is already used.');
+            console.log(bind + ' is already used.');
             process.exit(1);
         default:
             throw error;
     }
 };
 
-const SERVER = HTTP.createServer(APP);
-SERVER.on('error', errorHandler);
-SERVER.on('listening', () => {
-    const ADRESS = SERVER.address()
-    const BIND = typeof ADRESS === 'string' ? 'pipe ' + ADRESS : 'port: ' + PORT;
-    console.log('Listening on ' + BIND)
+const Server = Http.createServer(App);
+Server.on('error', errorHandler);
+Server.on('listening', () => {
+    const address = Server.address()
+    const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
+    console.log('Listening on ' + bind)
 });
 
-SERVER.listen(PORT);
+Server.listen(port);

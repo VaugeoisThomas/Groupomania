@@ -19,7 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "maskdata": "^1.1.6",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.12",
     "password-validator": "^5.1.1"
   }
 }

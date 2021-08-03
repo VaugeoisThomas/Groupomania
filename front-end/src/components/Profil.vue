@@ -23,14 +23,14 @@
           </div>
           <div class="card-footer">
             <button
-              v-if="is_admin == 1 || profil.id == userId"
+              v-if="is_admin == 1 || profil.id == id"
               class="btn btn-danger"
               @click="deleteProfil = !deleteProfil"
             >
               Supprimer son compte
             </button>
             <button
-              v-if="isAdmin == 1 || profil.id == userId"
+              v-if="is_admin == 1 || profil.id == id"
               class="btn btn-info"
               @click="modifyProfil = !modifyProfil"
             >
@@ -145,57 +145,44 @@ export default {
       password: "",
       name: "",
       profil: [],
-      userId: "",
+      id: "",
       token: "",
       deleteProfil: false,
       modifyProfil: false,
+      errMessage: "",
+      successMessage: ""
     };
   },
-  beforeRouteUpdate(to, from, next) {
-    this.findUser(to.params.id);
+  beforeRouteUpdate(to, from, next) { 
+    this.findUser(to.params.id); 
     next();
   },
+
   created() {
     this.findUser(this.$route.params.id);
-
-    if (localStorage.userId) {
-      this.userId = localStorage.userId;
-    }
-    if (localStorage.jwt) {
-      this.token = localStorage.jwt;
-    }
-    if (localStorage.is_admin) {
-      this.is_admin = localStorage.is_admin;
-    }
+    if (localStorage.id) this.id = localStorage.id;
+    if (localStorage.jwt) this.token = localStorage.jwt;
+    if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
   },
   methods: {
     findUser() {
       axios
         .get(`http://localhost:3000/api/user/${this.$route.params.id}`)
-        .then((response) => {
-          this.profil = response.data.result;
-        })
-        .catch(() => {
-          alert(
-            "Nous rencontrons des problèmes à vous identifier, veuillez rééssayer plus tard !"
-          );
-        });
+        .then((response) => { this.profil = response.data.result; })
+        .catch((err) => { this.errMessage = err.response.data.error; });
     },
+
     deleteAccount() {
       const configuration = {
-        headers: {
-          Authorization: `Bearer ` + this.token,
-        },
+        headers: { Authorization: `Bearer ` + this.token},
       };
       axios
-        .delete("http://localhost:3000/api/user/" + this.userId, configuration)
+        .delete("http://localhost:3000/api/user/" + this.id, configuration)
         .then(() => {
           localStorage.clear();
           window.location.href = "/";
         })
-        .catch(() => {
-          alert("Vous ne pouvez pas supprimer ce profil");
-        });
+        .catch((err) => { this.errMessage = err.response.data.error; });
     },
     modifyAccount(e) {
       if (e) {
@@ -203,27 +190,13 @@ export default {
         e.stopPropagation();
       }
       const configuration = {
-        headers: {
-          Authorization: `Bearer ` + this.token,
-        },
+        headers: { Authorization: `Bearer ` + this.token}
       };
 
       axios
-        .put(
-          "http://localhost:3000/api/user/" + this.userId + "/updateProfil",
-          {
-            email: this.email,
-            password: this.password,
-            name: this.name,
-          },
-          configuration
-        )
-        .then(() => {
-          window.location.reload();
-        })
-        .catch(() => {
-          alert("Un problème interne est survenue");
-        });
+        .put("http://localhost:3000/api/user/" + this.id + "/updateProfil", {email: this.email, password: this.password, name: this.name}, configuration)
+        .then(() => { window.location.reload(); })
+        .catch((err) => { this.errMessage = err.response.data.error; });
     },
   },
 };

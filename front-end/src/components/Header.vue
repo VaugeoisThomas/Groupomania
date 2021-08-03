@@ -4,7 +4,7 @@ export default {
   data() {
     return {
       authenticate: "",
-      userId: "",
+      id: "",
     };
   },
   methods: {
@@ -14,12 +14,8 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.jwt) {
-      this.authenticate = localStorage.jwt;
-    }
-    if (localStorage.userId) {
-      this.userId = localStorage.userId;
-    }
+    if (localStorage.jwt) { this.authenticate = localStorage.jwt; }
+    if (localStorage.id) { this.id = localStorage.id; }
   },
 };
 </script>
@@ -60,7 +56,7 @@ export default {
             <li class="nav-item" v-if="authenticate">
               <router-link
                 class="nav-link"
-                :to="{ name: 'Profil', params: { id: userId } }"
+                :to="{ name: 'Profil', params: { id: id } }"
                 exact
                 >Profil</router-link
               >

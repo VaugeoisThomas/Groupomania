@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       messages: [],
-      userId: "",
+      id: "",
       authenticate: "",
       successMessage: "",
       errMessage: "",
@@ -50,8 +50,8 @@ export default {
       });
   },
   mounted() {
-    if (localStorage.userId) {
-      this.userId = localStorage.userId;
+    if (localStorage.id) {
+      this.id = localStorage.id;
     }
     if (localStorage.is_admin) {
       this.is_admin = localStorage.is_admin;
@@ -66,7 +66,7 @@ export default {
       axios
         .post("http://localhost:3000/api/forum", {
           content: this.content,
-          user_id: this.userId,
+          user_id: this.id,
         })
         .then(() => {
           window.location.reload();

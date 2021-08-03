@@ -84,13 +84,8 @@ export default {
         email_form = document.querySelector("#email"),
         password_form = document.querySelector("#password");
 
-      if (email_form === "" || email_form === null) {
-        that.errMessage = "Veuillez entrer un email valide";
-      }
-
-      if (password_form === "" || password_form === null) {
-        that.errMessage = "Veuillez entrer un password valide";
-      }
+      if (email_form === "" || email_form === null) that.errMessage = "Veuillez entrer un email valide";
+      if (password_form === "" || password_form === null) that.errMessage = "Veuillez entrer un password valide";
 
       if (form.checkValidity(event) === false) {
         event.preventDefault();
@@ -99,23 +94,18 @@ export default {
       } else {
         form.classList.add("ok");
         axios
-          .post("http://localhost:3000/api/user/login", {
-            email: this.email,
-            password: this.password,
-          })
+          .post("http://localhost:3000/api/user/login", { email: this.email, password: this.password })
           .then((response) => {
             that.successMessage = response.data.message;
             localStorage.setItem("jwt", response.data.token);
-            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("id", response.data.id);
             localStorage.setItem("is_admin", response.data.is_admin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };
             window.location.href = "/forum";
           })
-          .catch((err) => {
-            that.errMessage = err.response.data.message;
-          });
+          .catch((err) => { that.errMessage = err.response.data.message; });
       }
     },
   },

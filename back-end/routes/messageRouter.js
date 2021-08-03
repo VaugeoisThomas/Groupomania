@@ -1,8 +1,9 @@
-const Express = require("Express");
-const ROUTER = Express.Router();
-const MESSAGE = require('../controllers/messageController');
+const Express = require("express");
+const Router = Express.Router();
+const Message = require('../controllers/messageController');
+const auth = require("../middleware/authentication");
 
-ROUTER.get('/', MESSAGE.getAllMessages);
-ROUTER.delete('/:id', MESSAGE.deleteMessage);
-ROUTER.post('/', MESSAGE.addMessage);
-module.exports = ROUTER;
+Router.get('/', Message.getAllMessages);
+Router.post('/', Message.addMessage);
+Router.delete('/:id',auth, Message.deleteMessage);
+module.exports = Router;

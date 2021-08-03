@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
             if (err) {
                 res.status(403);
             } else {
-                req.userId = user;
+                req.id = user;
                 next();
             }
         });
