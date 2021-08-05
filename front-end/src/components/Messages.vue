@@ -1,41 +1,37 @@
 <template>
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header">
-        <p class="card-text mb-2 text-muted">
-          Message publié par
-          <span
-            class="link"
-            @click="goProfil(message.user_id)"
-            style="cursor: pointer"
-          >
-            {{ message.name }}</span
-          >
-          le {{ dateTranslation(message.created_at) }} à
-          {{ getTime(message.created_at) }}
-        </p>
-      </div>
-      <div class="card-body">
-        <p class="card-subtitle">{{ message.content }}</p>
-      </div>
-      <div class="card-footer">
-        <div class="options">
-          <button type="button" class="comment" @click="comment = !comment">
-            <i class="fas fa-comment"></i>
-          </button>
-          <button
-            class="btn btn-danger"
-            @click="deleteMessage(message.id)"
-            v-if="id == message.user_id || is_admin == 1"
-          >
-            Supprimer le message
-          </button>
-          <section v-show="comment">
-            <form @submit.prevent="comment(message.id)" method="post">
-              <input type="text" name="comment" id="comment">
-              <button type="submit" class="comment"></button>
-            </form>
-          </section>
+  <div class="container">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <p class="card-text mb-2 text-muted"> Message publié par <span class="link" @click="goProfil(message.user_id)" style="cursor: pointer" >{{ message.name }}</span> le {{ dateTranslation(message.created_at) }} à {{ getTime(message.created_at) }}</p>
+        </div>
+        <div class="card-body">
+          <p class="card-subtitle">{{ message.content }}</p>
+        </div>
+        <div class="card-footer">
+          <div class="options">
+            <button class="btn" @click="addComment = !addComment"><i class="fas fa-comment"></i></button>
+            <button class="btn" @click="showComments = !showComments">  Je teste</button>
+            <section v-show="addComment">
+              <form @submit.prevent="postComment(message.msg_id)" method="post">
+                <label :for="message.msg_id" class="ml-1"></label>
+                <input v-model="commentContent" type="text" name="comment" :id="message.msg_id" class="form-control" placeholder="Ajouter un commentaire" required>
+                <button type="submit" class="btn btn-outline-info">Publier</button>
+              </form>
+            </section>
+            <div class="comment" v-for="comment in comments.slice().reverse()" :key="comment.id">
+              <section v-show="showComments">
+                <div v-if="comment.message_id === message.msg_id">
+                  <div class="comment_list">
+                    <h3 v-if="comment.name"> {{ comment.name }}</h3>
+                    <p class="text-muted">{{comment.content}}</p>
+                  </div>
+                </div>
+                <div v-else> 0</div>
+              </section>
+            </div>
+            <button class="btn btn-danger" @click="deleteMessage(message.id)" v-if="id == message.user_id || is_admin == 1" > Supprimer le message </button>
+          </div> 
         </div>
       </div>
     </div>
@@ -52,16 +48,22 @@ export default {
   props: ["message"],
   data() {
     return {
+      comment: null,
       comments: [],
+      addComment: false,
+      showComments: false,
+      commentContent: "",
       id: "",
       is_admin: "",
       errMessage: "",
+      totalCommentsByMessage: []
     };
   },
   created() {
     axios
       .get("http://localhost:3000/api/comment")
       .then((response) => { this.comments = response.data.result; })
+      .then(() => console.log(this.comments))
       .catch((err) => { this.errMessage = err.response.data.error; });
   },
   mounted() {
@@ -81,9 +83,17 @@ export default {
         .catch((err) => { this.errMessage = err.response.data.error; });
     },
 
-    addComment(id){
+    /*getTotalCommentsByMessage(id){
       axios
-        .post("http://localhost:3000/api/comments", { user_id: this.id, message_id: id, content: this.comment})
+        .get("http://localhost:3000/api/comment/" + id +"/messages")
+        .then((response) => { this.totalCommentsByMessage = response.data.result.length})
+        .then(() => {console.log(this.totalCommentsByMessage)})
+        .catch((err) => { this.errMessage = err.response.data.error; })
+    },*/
+
+    postComment(id){
+      axios
+        .post("http://localhost:3000/api/comment", { user_id: this.id, message_id: id, content: this.comment})
         .then(() => { window.location.reload();})
         .catch((err) => { this.errMessage = err.response.data.error; })
     },
@@ -107,10 +117,17 @@ export default {
 .options {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .comment {
-  border: none !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.comment_list{
+  display: flex;
+  flex-direction: column;
 }
 </style>
