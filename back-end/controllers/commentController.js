@@ -1,4 +1,4 @@
-const comment = require('../models/comment');
+/*const comment = require('../models/comment');
 const bdd = require('../config/database');
 const error_management = require('../middleware/error-management');
 
@@ -25,11 +25,11 @@ exports.getAllComments = (req, res) => {
 
 exports.getCommentForOneMessage = (req, res) => {
     console.log(req);
-/*     if(req.params.id) {
+     if(req.params.id) {
         bdd.query(comment.getCommentByMessages(), req.params.id, (err, result) => {
             return (err ? res.status(500).json(error_management.error(err)) : res.status(200).json(error_management.success(result)));
         });
-    } else return res.status(404).json(error_management.error("Aucun commentaire n'a été trouvé pour ce message !")) */
+    } else return res.status(404).json(error_management.error("Aucun commentaire n'a été trouvé pour ce message !")) 
 }
 
 
@@ -47,4 +47,4 @@ exports.deleteComment = (req, res) => {
             } else return res.status(404).json(error_management.error('Ce commentaire est introuvable.'));
         }
     })
-};
+};*/

@@ -1,11 +1,12 @@
-const message = require('../models/message');
+/*const post = require('../models/posts');
 const bdd = require('../config/database');
 const error_management = require('../middleware/error-management');
 
-exports.getAllMessages = (req, res) => {
-    bdd.query(message.getAllMessages(), (err, result) => {
+exports.getAllPosts = (req, res) => {
+    bdd.query(message.getPost(), (err, result) => {
         return (err ? res.status(500).json(error_management.error(err.message)) : res.status(201).json(error_management.success(result)));
     });
+    post.getAllPosts
 };
 
 exports.deleteMessage = (req, res) => {
@@ -27,4 +28,4 @@ exports.addMessage = (req, res) => {
     bdd.query(message.addMessage(), [req.body.content, req.body.user_id], (err, result) => {
         return (err ? res.status(500).json(error_management.error(err.message)) : res.status(201).json(error_management.success(result)));
     });
-};
+};*/

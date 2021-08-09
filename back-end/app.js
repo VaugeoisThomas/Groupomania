@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const user = require('./routes/userRouter');
-const message = require('./routes/messageRouter');
-const comment = require('./routes/commentRouter');
+//const post = require('./routes/postRouter');
+//const comment = require('./routes/commentRouter');
 const compression = require('compression');
 const app = express();
 
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/user", user);
-app.use("/api/forum", message);
-app.use("/api/comment", comment);
+//app.use("/api/post", post);
+//app.use("/api/comment", comment);
 
 module.exports = app;

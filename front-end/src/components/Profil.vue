@@ -4,11 +4,11 @@
       <div class="row">
         <div class="card">
           <card class="card-header bg-blue">
-            <h1>Profil de {{ profil.name }}</h1>
+            <h1>Profil de {{ profil.username }}</h1>
           </card>
           <div class="card-body">
             <div class="card-text">
-              <p>Pseudo: {{ profil.name }}</p>
+              <p>Pseudo: {{ profil.username }}</p>
             </div>
             <div class="card-text">
               <p>Email: {{ profil.email }}</p>
@@ -194,7 +194,7 @@ export default {
       };
 
       axios
-        .put("http://localhost:3000/api/user/" + this.id + "/updateProfil", {email: this.email, password: this.password, name: this.name}, configuration)
+        .put("http://localhost:3000/api/user/" + this.id + "/updateProfil", {email: this.email, password: this.password, username: this.name}, configuration)
         .then(() => { window.location.reload(); })
         .catch((err) => { this.errMessage = err.response.data.error; });
     },

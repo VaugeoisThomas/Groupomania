@@ -110,7 +110,7 @@ export default {
       } else {
         form.classList.add("ok");
         axios
-          .post("http://localhost:3000/api/user", { email: this.email, password: this.password, name: this.name })
+          .post("http://localhost:3000/api/user", { email: this.email, password: this.password, username: this.name })
           .then((response) => {
             that.successMessage = response.data.message;
             localStorage.setItem("jwt", response.data.token);
