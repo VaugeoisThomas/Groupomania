@@ -11,7 +11,7 @@
         <div class="card-footer">
           <div class="options">
             <button class="btn" @click="addComment = !addComment"><i class="fas fa-comment"></i></button>
-            <button class="btn" @click="showComments = !showComments">  Je teste</button>
+            <button class="btn" @click="showComments = !showComments"> {{ totalCommentsByMessage }} commentaires</button>
             <section v-show="addComment">
               <form @submit.prevent="postComment(message.msg_id)" method="post">
                 <label :for="message.msg_id" class="ml-1"></label>
@@ -63,13 +63,14 @@ export default {
     axios
       .get("http://localhost:3000/api/comment")
       .then((response) => { this.comments = response.data.result; })
-      .then(() => console.log(this.comments))
       .catch((err) => { this.errMessage = err.response.data.error; });
   },
+
   mounted() {
     if (localStorage.id) this.id = localStorage.id;
     if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
   },
+  
   methods: {
     deleteMessage(id) {
       const configuration = {
@@ -83,13 +84,12 @@ export default {
         .catch((err) => { this.errMessage = err.response.data.error; });
     },
 
-    /*getTotalCommentsByMessage(id){
+    getTotalCommentsByMessage(id){
       axios
         .get("http://localhost:3000/api/comment/" + id +"/messages")
-        .then((response) => { this.totalCommentsByMessage = response.data.result.length})
-        .then(() => {console.log(this.totalCommentsByMessage)})
+        .then((response) => { console.log(response.data.result.length); })
         .catch((err) => { this.errMessage = err.response.data.error; })
-    },*/
+    },
 
     postComment(id){
       axios

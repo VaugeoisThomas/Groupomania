@@ -1,5 +1,5 @@
 const message = require('../models/message');
-const bdd = require('../models/dbConnect');
+const bdd = require('../config/database');
 const error_management = require('../middleware/error-management');
 
 exports.getAllMessages = (req, res) => {

@@ -1,12 +1,12 @@
 const comment = require('../models/comment');
-const bdd = require('../models/dbConnect');
+const bdd = require('../config/database');
 const error_management = require('../middleware/error-management');
 
 //ADD A COMMENT
 exports.addComments = (req, res) => {
     bdd.query(comment.addComment(), [req.body.users_id, req.body.messages_id, req.body.content], (err, result) => {
-            return(err ? res.status(400).json(error_management.error(err.message)) : res.status(201).json(error_management.success(result)));
-        });
+        return(err ? res.status(400).json(error_management.error(err.message)) : res.status(201).json(error_management.success(result)));
+    });
 };
 
 //GET ALL COMMENTS SORT BY USERS
@@ -24,11 +24,12 @@ exports.getAllComments = (req, res) => {
 };
 
 exports.getCommentForOneMessage = (req, res) => {
-    if(req.params.id) {
+    console.log(req);
+/*     if(req.params.id) {
         bdd.query(comment.getCommentByMessages(), req.params.id, (err, result) => {
             return (err ? res.status(500).json(error_management.error(err)) : res.status(200).json(error_management.success(result)));
         });
-    } else return res.status(404).json(error_management.error("Aucun commentaire n'a été trouvé pour ce message !"))
+    } else return res.status(404).json(error_management.error("Aucun commentaire n'a été trouvé pour ce message !")) */
 }
 
 

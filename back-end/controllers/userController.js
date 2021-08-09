@@ -1,5 +1,5 @@
-const user = require('../models/User');
-const bdd = require('../models/dbConnect');
+/* const user = require('../models/User');
+const bdd = require('../config/database'); */
 const password_schema = require("../middleware/password-validator");
 const error_management = require("../middleware/error-management");
 const jwt = require('jsonwebtoken');
@@ -17,26 +17,26 @@ exports.createUser = (req, res) => {
                     bcrypt.hash(req.body.password, 10)
                         .then(hash => {
                             const Hashed_password = hash;
-                            bdd.query(user.creationUser(),[masked_email, Hashed_password, req.body.name], (err) => {
-                                    if (err) return res.status(401).json(error_management.error(err.message));
-                                    else {
-                                        bdd.query(user.selectUserByEmail(), masked_email, (err, result) => {
-                                            if (err) return res.status(500).json(error_management.error(err.message));
-                                            else {
-                                                return res.status(201).json({
-                                                    id: result[0].id,
-                                                    token: jwt.sign(
-                                                        { id: result[0].id },
-                                                        process.env.TOKEN,
-                                                        { expiresIn: process.env.TOKEN_EXPIRES_IN }
-                                                    ),
-                                                    is_admin: result[0].is_admin
-                                                });
-                                            }
-                                        })
+                            bdd.query(user.creationUser(), [masked_email, Hashed_password, req.body.name], (err) => {
+                                if (err) return res.status(401).json(error_management.error(err.message));
+                                else {
+                                    bdd.query(user.selectUserByEmail(), masked_email, (err, result) => {
+                                        if (err) return res.status(500).json(error_management.error(err.message));
+                                        else {
+                                            return res.status(201).json({
+                                                id: result[0].id,
+                                                token: jwt.sign(
+                                                    { id: result[0].id },
+                                                    process.env.TOKEN,
+                                                    { expiresIn: process.env.TOKEN_EXPIRES_IN }
+                                                ),
+                                                is_admin: result[0].is_admin
+                                            });
+                                        }
+                                    })
 
-                                    }
-                                });
+                                }
+                            });
                         })
                         .catch(error => res.status(500).json(error_management.error(error)))
                 }
@@ -53,7 +53,7 @@ exports.login = (req, res) => {
             if (err) return res.status(401).json(error_management.error(err.message));
             else {
                 if (masked_email === result[0].email) {
-                    if (!req.body.password || !bcrypt.compareSync(req.body.password, result[0].password)) 
+                    if (!req.body.password || !bcrypt.compareSync(req.body.password, result[0].password))
                         return res.status(401).json(error_management.error("Mot de passe incorrect"));
                     else {
                         return res.status(200).json({
@@ -117,26 +117,26 @@ exports.updateAccount = (req, res) => {
                                 bcrypt.hash(req.body.password, 10)
                                     .then(hash => {
                                         const Hashed_password = hash;
-                                        bdd.query(user.updateData(),[req.body.name, Hashed_password, masked_email, req.params.id], (err) => {
-                                                if (err) return res.status(401).json(error_management.error(err.message));
-                                                else {
-                                                    bdd.query(user.selectUserByEmail(), masked_email, (err, result) => {
-                                                        if (err) return res.status(500).json(error_management.error(err.message))
-                                                        else {
-                                                            return res.status(201).json({
-                                                                id: result[0].id,
-                                                                token: jwt.sign(
-                                                                    { id: result[0].id },
-                                                                    process.env.TOKEN,
-                                                                    { expiresIn: process.env.TOKEN_EXPIRES_IN }
-                                                                ),
-                                                                isAdmin: result[0].is_admin
-                                                            });
-                                                        }
-                                                    })
+                                        bdd.query(user.updateData(), [req.body.name, Hashed_password, masked_email, req.params.id], (err) => {
+                                            if (err) return res.status(401).json(error_management.error(err.message));
+                                            else {
+                                                bdd.query(user.selectUserByEmail(), masked_email, (err, result) => {
+                                                    if (err) return res.status(500).json(error_management.error(err.message))
+                                                    else {
+                                                        return res.status(201).json({
+                                                            id: result[0].id,
+                                                            token: jwt.sign(
+                                                                { id: result[0].id },
+                                                                process.env.TOKEN,
+                                                                { expiresIn: process.env.TOKEN_EXPIRES_IN }
+                                                            ),
+                                                            isAdmin: result[0].is_admin
+                                                        });
+                                                    }
+                                                })
 
-                                                }
-                                            });
+                                            }
+                                        });
                                     })
                                     .catch(error => res.status(500).json(error_management.error(error)));
                             }

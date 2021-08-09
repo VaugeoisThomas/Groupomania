@@ -33,30 +33,29 @@ export default {
   data() {
     return {
       messages: [],
-      id: "",
+      user_id: "",
       authenticate: "",
       successMessage: "",
       errMessage: "",
+      comments: 0
     };
   },
   created() {
-    axios
-      .get("http://localhost:3000/api/forum")
-      .then((response) => {
-        this.messages = response.data.result;
-      })
-      .catch((err) => {
-        this.errMessage = err.response.data.message;
-      });
+    const getMessages = axios.get('http://localhost:3000/api/forum');
+    const getCommentsByMessage = axios.get("http://localhost:3000/api/comment/" + id +"/messages", {params: {id: id}});
+
+    axios.all(getMessages, getCommentsByMessage)
+      .then(axios.spread(( ...responses) => {
+        this.messages = responses[0]
+        this.comments = responses[1]
+        }))
+      .catch((err) => {this.errMessage = err.response.data.message;});
   },
   mounted() {
-    if (localStorage.id) {
-      this.id = localStorage.id;
-    }
-    if (localStorage.is_admin) {
-      this.is_admin = localStorage.is_admin;
-    }
+    if (localStorage.id) this.user_id = localStorage.id;
+    if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
   },
+
   methods: {
     addMessage(e) {
       if (e) {
@@ -64,16 +63,9 @@ export default {
         e.stopPropagation();
       }
       axios
-        .post("http://localhost:3000/api/forum", {
-          content: this.content,
-          user_id: this.id,
-        })
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          this.errMessage = err.response.data.message;
-        });
+        .post("http://localhost:3000/api/forum", { content: this.content, user_id: this.id })
+        .then(() => { window.location.reload(); })
+        .catch((err) => {this.errMessage = err.response.data.message;});
     },
   },
 };
