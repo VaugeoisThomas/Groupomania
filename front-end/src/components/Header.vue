@@ -3,7 +3,7 @@ export default {
   name: "Header",
   data() {
     return {
-      authenticate: "",
+      jwt: "",
       id: "",
     };
   },
@@ -14,7 +14,7 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.jwt) { this.authenticate = localStorage.jwt; }
+    if (localStorage.jwt) { this.jwt = localStorage.jwt; }
     if (localStorage.id) { this.id = localStorage.id; }
   },
 };
@@ -45,7 +45,7 @@ export default {
         </button>
         <div class="collapse navbar-collapse" id="navbarScroll">
           <ul class="nav nav-tabs" style="--bs-scroll-height: 100px">
-            <li class="nav-item" v-if="authenticate">
+            <li class="nav-item" v-if="jwt">
               <router-link class="nav-link" to="/forum" exact
                 >Forum</router-link
               >
@@ -53,7 +53,7 @@ export default {
             <li class="nav-item" v-else>
               <router-link class="nav-link" to="/" exact>Accueil</router-link>
             </li>
-            <li class="nav-item" v-if="authenticate">
+            <li class="nav-item" v-if="jwt">
               <router-link
                 class="nav-link"
                 :to="{ name: 'Profil', params: { id: id } }"
@@ -66,7 +66,7 @@ export default {
                 >Connexion</router-link
               >
             </li>
-            <li class="nav-item" v-if="authenticate" @click="logout">
+            <li class="nav-item" v-if="jwt" @click="logout">
               <router-link class="nav-link" to="/login" exact
                 >Déconnexion</router-link
               >

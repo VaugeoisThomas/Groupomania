@@ -115,7 +115,7 @@ export default {
             that.successMessage = response.data.message;
             localStorage.setItem("jwt", response.data.token);
             localStorage.setItem("id", response.data.id);
-            localStorage.setItem("is_admin", response.data.isAdmin);
+            localStorage.setItem("is_admin", response.data.is_admin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };

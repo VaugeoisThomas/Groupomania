@@ -3,12 +3,12 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <p class="card-text mb-2 text-muted"> Message publié par <span class="link" @click="goProfil(message.user_id)" style="cursor: pointer" >{{ message.name }}</span> le {{ dateTranslation(message.created_at) }} à {{ getTime(message.created_at) }}</p>
+          <p class="card-text mb-2 text-muted"> Message publié par <span class="link" @click="goProfil(post.User.id)" style="cursor: pointer" >{{ post.User.username }}</span> le {{ dateTranslation(post.createdAt) }} à {{ getTime(post.createdAt) }}</p>
         </div>
         <div class="card-body">
-          <p class="card-subtitle">{{ message.content }}</p>
+          <p class="card-subtitle">{{ post.content }}</p>
         </div>
-        <div class="card-footer">
+        <!--<div class="card-footer">
           <div class="options">
             <button class="btn" @click="addComment = !addComment"><i class="fas fa-comment"></i></button>
             <button class="btn" @click="showComments = !showComments"> {{ totalCommentsByMessage }} commentaires</button>
@@ -32,7 +32,7 @@
             </div>
             <button class="btn btn-danger" @click="deleteMessage(message.id)" v-if="id == message.user_id || is_admin == 1" > Supprimer le message </button>
           </div> 
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -40,12 +40,12 @@
 
 <script>
 import moment from "moment";
-import axios from "axios";
+//import axios from "axios";
 moment.locale("fr");
 
 export default {
-  name: "Messages",
-  props: ["message"],
+  name: "Posts",
+  props: ["post"],
   data() {
     return {
       comment: null,
@@ -56,35 +56,24 @@ export default {
       id: "",
       is_admin: "",
       errMessage: "",
-      totalCommentsByMessage: []
+      totalCommentsByPosts: []
     };
   },
-  created() {
+  /*created() {
     axios
       .get("http://localhost:3000/api/comment")
       .then((response) => { this.comments = response.data.result; })
       .catch((err) => { this.errMessage = err.response.data.error; });
   },
-
+*/
   mounted() {
     if (localStorage.id) this.id = localStorage.id;
     if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
   },
   
   methods: {
-    deleteMessage(id) {
-      const configuration = {
-        headers: {
-          Authorization: `Bearer ` + this.token,
-        },
-      };
-      axios
-        .delete("http://localhost:3000/api/forum/" + id, configuration)
-        .then(() => { window.location.reload(); })
-        .catch((err) => { this.errMessage = err.response.data.error; });
-    },
 
-    getTotalCommentsByMessage(id){
+    /*getTotalCommentsByMessage(id){
       axios
         .get("http://localhost:3000/api/comment/" + id +"/messages")
         .then((response) => { console.log(response.data.result.length); })
@@ -96,7 +85,7 @@ export default {
         .post("http://localhost:3000/api/comment", { user_id: this.id, message_id: id, content: this.comment})
         .then(() => { window.location.reload();})
         .catch((err) => { this.errMessage = err.response.data.error; })
-    },
+    },*/
 
     dateTranslation(date) {
       return moment(date).format(" Do/MM/YYYY");

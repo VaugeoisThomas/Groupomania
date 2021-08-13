@@ -11,10 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Posts.hasMany(models.Comments)
+      Posts.belongsTo(models.Users, {
+        foreignKey: {
+          allowNull: false
+        }
+      })
     }
   };
   Posts.init({
-    content: DataTypes.STRING
+    content: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Posts',

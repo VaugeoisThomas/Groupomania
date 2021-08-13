@@ -1,18 +1,18 @@
 <template>
   <div class="container">
-    <message
-      class="row message"
-      v-for="message in messages.slice().reverse()"
-      :key="message.msg_id"
-      :message="message"
+    <posts
+      class="row post"
+      v-for="post in posts.slice().reverse()"
+      :key="post.id"
+      :post="post"
     >
-    </message>
+    </posts>
 
     <div class="row send">
       <div class="col-md-12">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" />
-          <button @click="addMessage" type="button" class="btn btn-secondary">
+          <input type="text" class="form-control" v-model="content" required/>
+          <button @click="addPost" type="button" class="btn btn-secondary">
             Envoyer un message
           </button>
         </div>
@@ -23,49 +23,56 @@
 
 <script>
 import axios from "axios";
-import Messages from "./Messages";
+import Posts from "./Posts";
 
 export default {
   name: "Forum",
   components: {
-    message: Messages,
+    posts: Posts,
   },
   data() {
     return {
-      messages: [],
-      user_id: "",
-      authenticate: "",
+      posts: [],
+      content: "",
+      UserId: "",
+      is_admin: "",
       successMessage: "",
       errMessage: "",
-      comments: 0
     };
   },
   created() {
-    const getMessages = axios.get('http://localhost:3000/api/forum');
-    const getCommentsByMessage = axios.get("http://localhost:3000/api/comment/" + id +"/messages", {params: {id: id}});
-
-    axios.all(getMessages, getCommentsByMessage)
-      .then(axios.spread(( ...responses) => {
-        this.messages = responses[0]
-        this.comments = responses[1]
-        }))
-      .catch((err) => {this.errMessage = err.response.data.message;});
+    axios
+      .get("http://localhost:3000/api/post")
+      .then((response) => { this.posts = response.data.result })
+      .catch((err) => { this.errMessage = err.response.data.message})
   },
   mounted() {
-    if (localStorage.id) this.user_id = localStorage.id;
+    if (localStorage.id) this.UserId = localStorage.id;
     if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
   },
 
   methods: {
-    addMessage(e) {
+    addPost(e) {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
       axios
-        .post("http://localhost:3000/api/forum", { content: this.content, user_id: this.id })
+        .post("http://localhost:3000/api/post", { content: this.content, UserId: this.UserId })
         .then(() => { window.location.reload(); })
         .catch((err) => {this.errMessage = err.response.data.message;});
+    },
+
+    deletePost(id) {
+      const configuration = {
+        headers: {
+          Authorization: `Bearer ` + this.token,
+        },
+      };
+      axios
+        .delete("http://localhost:3000/api/post/" + id, configuration)
+        .then(() => { window.location.reload(); })
+        .catch((err) => { this.errMessage = err.response.data.message; });
     },
   },
 };

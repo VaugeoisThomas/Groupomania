@@ -1,31 +1,34 @@
-/*const post = require('../models/posts');
-const bdd = require('../config/database');
-const error_management = require('../middleware/error-management');
+const db = require('../models');
+const status_management = require('../middleware/status-management');
 
 exports.getAllPosts = (req, res) => {
-    bdd.query(message.getPost(), (err, result) => {
-        return (err ? res.status(500).json(error_management.error(err.message)) : res.status(201).json(error_management.success(result)));
-    });
-    post.getAllPosts
-};
-
-exports.deleteMessage = (req, res) => {
-    bdd.query(message.selectMessageById(), req.params.id, (err, result) => {
-        if (err) return res.status(500).json(error_management.error(err.message));
-        else {
-            if (result[0] != undefined) {
-                if (req.params.id == result[0].id) {
-                    bdd.query(message.deleteMessage(), req.params.id, (err, result) => {
-                        return (err ? res.status(403).json(error_management.error(err.message)) : res.status(200).json(error_management.success(result)));
-                    });
-                } else return res.status(403).json(error_management.error('Vous ne pouvez pas supprimer ce message !'));
-            } else return res.status(404).json(error_management.error("Message non reconnu"));
-        }
+    db.Posts.findAll({
+        include: [{
+            model: db.Users,
+            attributes: ['id', 'username', 'is_admin']
+        }]
     })
+    .then((posts) => { return res.status(200).json(status_management.success(posts))})
+    .catch((err) => { return res.status(500).json(error_management.error(err.message))})
 };
 
-exports.addMessage = (req, res) => {
-    bdd.query(message.addMessage(), [req.body.content, req.body.user_id], (err, result) => {
-        return (err ? res.status(500).json(error_management.error(err.message)) : res.status(201).json(error_management.success(result)));
-    });
-};*/
+exports.deletePost = (req, res) => {
+    db.Posts.findOne({ where:{id:req.params.id}})
+    .then(post_founded => { return res.status(200).json({post_founded})
+        /*if(req.params.id === post_founded.UserId || post_founded.is_admin == 1){
+            db.Posts.destroy({attributes: id, where:{id:req.params.id}})
+            .then(() => { return res.status(200).json(status_management.success("Message supprimé !"))})
+            .catch(err => { return res.status(500).json(status_management.error(`Impossible de supprimer le message: ${err} `))})
+        } else return res.status(401).json(status_management.error("Vous ne pouvez pas supprimer ce message !"));*/
+    })
+    .catch(err => { return res.status(500).json(status_management.error(`Une erreur est survenue: ${err}`))});
+};
+
+exports.addPost = (req, res) => {
+        var new_post = db.Posts.create({
+        content: req.body.content,
+        UserId: req.body.UserId,
+    })
+    .then((new_post) => { return res.status(200).json(status_management.success(new_post))})
+    .catch((err) => { return res.status(500).json(status_management.error(`Une erreur est survenue lors de l'envois du message: ${err}`))});
+};
