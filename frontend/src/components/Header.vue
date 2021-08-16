@@ -9,13 +9,13 @@ export default {
   },
   methods: {
     logout() {
-      localStorage.clear();
+      sessionStorage.clear();
       window.location.href = "/";
     },
   },
   mounted() {
-    if (localStorage.jwt) { this.jwt = localStorage.jwt; }
-    if (localStorage.id) { this.id = localStorage.id; }
+    if (sessionStorage.jwt) { this.jwt = sessionStorage.jwt; }
+    if (sessionStorage.id) { this.id = sessionStorage.id; }
   },
 };
 </script>

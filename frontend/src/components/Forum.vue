@@ -47,34 +47,9 @@ export default {
       .catch((err) => { this.errMessage = err.response.data.message})
   },
   mounted() {
-    if (localStorage.id) this.UserId = localStorage.id;
-    if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
-  },
-
-  methods: {
-    addPost(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      axios
-        .post("http://localhost:3000/api/post", { content: this.content, UserId: this.UserId })
-        .then(() => { window.location.reload(); })
-        .catch((err) => {this.errMessage = err.response.data.message;});
-    },
-
-    deletePost(id) {
-      const configuration = {
-        headers: {
-          Authorization: `Bearer ` + this.token,
-        },
-      };
-      axios
-        .delete("http://localhost:3000/api/post/" + id, configuration)
-        .then(() => { window.location.reload(); })
-        .catch((err) => { this.errMessage = err.response.data.message; });
-    },
-  },
+    if (sessionStorage.id) this.UserId = sessionStorage.id;
+    if (sessionStorage.is_admin) this.is_admin = sessionStorage.is_admin;
+  }
 };
 </script>
 

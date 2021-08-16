@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 
-const normalize_port = (val) => {
+const normalizePort = (val) => {
     const port = parseInt(val, 10);
 
     if (isNaN(port)) return val;
@@ -9,7 +9,7 @@ const normalize_port = (val) => {
     return false;
 }
 
-const port = normalize_port(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const errorHandler = (error) => {

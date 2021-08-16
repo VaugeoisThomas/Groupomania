@@ -160,9 +160,9 @@ export default {
 
   created() {
     this.findUser(this.$route.params.id);
-    if (localStorage.id) this.id = localStorage.id;
-    if (localStorage.jwt) this.token = localStorage.jwt;
-    if (localStorage.is_admin) this.is_admin = localStorage.is_admin;
+    if (sessionStorage.id) this.id = sessionStorage.id;
+    if (sessionStorage.jwt) this.token = sessionStorage.jwt;
+    if (sessionStorage.is_admin) this.is_admin = sessionStorage.is_admin;
   },
   methods: {
     findUser() {

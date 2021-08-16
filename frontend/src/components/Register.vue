@@ -2,7 +2,7 @@
   <main class="container">
     <div class="card">
       <div class="card-header bg-primary text-white">
-        <h1 class="card-title text-uppercase">Connexion</h1>
+        <h1 class="card-title text-uppercase">Inscription</h1>
       </div>
       <div class="card-body">
         <form method="post" id="form-validation">
@@ -16,6 +16,7 @@
                   class="form-control"
                   id="email"
                   name="email"
+                  placeholder="Adresse email"
                   required
                 />
               </div>
@@ -29,7 +30,22 @@
                   class="form-control"
                   id="password"
                   name="password"
+                  placeholder="Mot de passe"
+                  required
                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+                />
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="user_name">Pseudo</label>
+                <input
+                  v-model="name"
+                  type="text"
+                  class="form-control"
+                  id="user_name"
+                  name="user_name"
+                  placeholder="Votre pseudo"
                   required
                 />
               </div>
@@ -41,13 +57,13 @@
         <div class="row">
           <div class="col-sm-12 col-md-12 mt-2">
             <button
-              @click="login()"
+              @click="registration()"
               class="btn btn-secondary"
               id="submit"
               value="submit"
               type="submit"
             >
-              Connexion
+              Inscription
             </button>
           </div>
         </div>
@@ -66,21 +82,21 @@
 
 <script>
 import axios from "axios";
-
 export default {
-  name: "Login",
+  name: "Register",
   data() {
     return {
       email: null,
       password: null,
+      name: null,
       errMessage: "",
       successMessage: "",
     };
   },
   methods: {
-    login() {
-      var that = this,
-        form = document.querySelector("#form-validation"),
+    registration() {
+      let form = document.querySelector("#form-validation"),
+        that = this,
         email_form = document.querySelector("#email"),
         password_form = document.querySelector("#password");
 
@@ -94,12 +110,12 @@ export default {
       } else {
         form.classList.add("ok");
         axios
-          .post("http://localhost:3000/api/user/login", { email: this.email, password: this.password })
+          .post("http://localhost:3000/api/user", { email: this.email, password: this.password, username: this.name })
           .then((response) => {
             that.successMessage = response.data.message;
-            localStorage.setItem("jwt", response.data.token);
-            localStorage.setItem("id", response.data.id);
-            localStorage.setItem("is_admin", response.data.is_admin);
+            sessionStorage.setItem("jwt", response.data.token);
+            sessionStorage.setItem("id", response.data.id);
+            sessionStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };
@@ -111,6 +127,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .container {
