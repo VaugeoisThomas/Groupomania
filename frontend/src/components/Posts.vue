@@ -11,7 +11,10 @@
         <div class="card-footer">
           <div class="options">
             <button class="btn" @click="addComment = !addComment"><i class="fas fa-comment"></i></button>
-            <!--<button class="btn" @click="showComments = !showComments"> {{ totalCommentsByMessage }} commentaires</button>-->
+            <button class="btn" @click="showComments = !showComments"> {{ post.commentsNbr }} commentaire(s)</button>
+            <button class="btn btn-danger" @click="deletePost(post.id)" v-if="id == post.UserId || isAdmin == 1" > Supprimer le message </button>
+          </div> 
+          <div class="commentsByPost">
             <section v-show="addComment">
               <form @submit.prevent="postComment(post.id)" method="post">
                 <label :for="post.id" class="ml-1"></label>
@@ -19,19 +22,13 @@
                 <button type="submit" class="btn btn-outline-info">Publier</button>
               </form>
             </section>
-            <!--<div class="comment" v-for="comment in comments.slice().reverse()" :key="comment.id">
-              <section v-show="showComments">
-                <div v-if="comment.message_id === message.msg_id">
-                  <div class="comment_list">
-                    <h3 v-if="comment.name"> {{ comment.name }}</h3>
-                    <p class="text-muted">{{comment.content}}</p>
-                  </div>
-                </div>
-                <div v-else> 0</div>
-              </section>
-            </div> -->
-            <button class="btn btn-danger" @click="deletePost(post.id)" v-if="id == post.UserId || is_admin == 1" > Supprimer le message </button>
-          </div> 
+            <section v-show="showComments">
+
+              <div class="commentShown" v-for="comment in comments" :key="comment.id">
+                {{comment.content}}
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     </div>
@@ -48,48 +45,34 @@ export default {
   props: ["post"],
   data() {
     return {
-      comment: null,
       comments: [],
       addComment: false,
       showComments: false,
-      commentContent: "",
-      id: "",
-      is_admin: "",
-      errMessage: "",
-      totalCommentsByPosts: []
+      PostId: '',
+      id: '',
     };
   },
-  created() {
+
+  created(){
     axios
       .get("http://localhost:3000/api/comment")
-      .then((response) => { this.comments = response.data.result; })
-      .catch((err) => { this.errMessage = err.response.data.error; });
+      .then((response) => { 
+        this.comments = [...response.data.result];
+        if(this.posts.length > 0){
+          this.posts.forEach((post) => {
+            this.getTotalCommentsByPost(post)
+          });
+        } 
+      })
+      .catch((err) => { this.errMessage = err.response.data.message; });
   },
 
   mounted() {
     if (sessionStorage.id) this.id = sessionStorage.id;
-    if (sessionStorage.is_admin) this.is_admin = sessionStorage.is_admin;
+    if (sessionStorage.isAdmin) this.isAdmin = sessionStorage.isAdmin;
   },
   
   methods: {
-
-    getTotalCommentsByMessage(id){
-      axios
-        .get("http://localhost:3000/api/comment/" + id +"/messages")
-        .then((response) => { console.log(response.data.result.length); })
-        .catch((err) => { this.errMessage = err.response.data.error; })
-    },
-
-    addPost(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      axios
-        .post("http://localhost:3000/api/post", { content: this.content, UserId: this.UserId })
-        .then(() => { window.location.reload(); })
-        .catch((err) => {this.errMessage = err.response.data.message;});
-    },
 
     deletePost(id) {
       const configuration = {
@@ -105,9 +88,9 @@ export default {
 
     postComment(id){
       axios
-        .post("http://localhost:3000/api/comment", { user_id: this.id, message_id: id, content: this.comment})
+        .post("http://localhost:3000/api/comment", { UserId: this.id, PostId: id, content: this.content})
         .then(() => { window.location.reload();})
-        .catch((err) => { this.errMessage = err.response.data.error; })
+        .catch((err) => { this.errMessage = err.response.data.message; })
     },
 
     dateTranslation(date) {
@@ -138,7 +121,7 @@ export default {
   justify-content: flex-start;
 }
 
-.comment_list{
+.commentList {
   display: flex;
   flex-direction: column;
 }

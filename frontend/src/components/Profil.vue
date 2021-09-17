@@ -16,21 +16,21 @@
             <div class="card-text">
               <p>
                 Admin :
-                <span v-if="is_admin == 1 || profil.is_admin == 1">Oui</span>
+                <span v-if="isAdmin == 1 || profil.isAdmin == 1">Oui</span>
                 <span v-else>Non </span>
               </p>
             </div>
           </div>
           <div class="card-footer">
             <button
-              v-if="is_admin == 1 || profil.id == id"
+              v-if="isAdmin == 1 || profil.id == id"
               class="btn btn-danger"
               @click="deleteProfil = !deleteProfil"
             >
               Supprimer son compte
             </button>
             <button
-              v-if="is_admin == 1 || profil.id == id"
+              v-if="isAdmin == 1 || profil.id == id"
               class="btn btn-info"
               @click="modifyProfil = !modifyProfil"
             >
@@ -162,7 +162,7 @@ export default {
     this.findUser(this.$route.params.id);
     if (sessionStorage.id) this.id = sessionStorage.id;
     if (sessionStorage.jwt) this.token = sessionStorage.jwt;
-    if (sessionStorage.is_admin) this.is_admin = sessionStorage.is_admin;
+    if (sessionStorage.isAdmin) this.isAdmin = sessionStorage.isAdmin;
   },
   methods: {
     findUser() {

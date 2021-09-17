@@ -81,11 +81,11 @@ export default {
     login() {
       var that = this,
         form = document.querySelector("#form-validation"),
-        email_form = document.querySelector("#email"),
-        password_form = document.querySelector("#password");
+        emailForm = document.querySelector("#email"),
+        passwordForm = document.querySelector("#password");
 
-      if (email_form === "" || email_form === null) that.errMessage = "Veuillez entrer un email valide";
-      if (password_form === "" || password_form === null) that.errMessage = "Veuillez entrer un password valide";
+      if (emailForm === "" || emailForm === null) that.errMessage = "Veuillez entrer un email valide";
+      if (passwordForm === "" || passwordForm === null) that.errMessage = "Veuillez entrer un password valide";
 
       if (form.checkValidity(event) === false) {
         event.preventDefault();
@@ -99,7 +99,7 @@ export default {
             that.successMessage = response.data.message;
             sessionStorage.setItem("jwt", response.data.token);
             sessionStorage.setItem("id", response.data.id);
-            sessionStorage.setItem("is_admin", response.data.is_admin);
+            sessionStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };

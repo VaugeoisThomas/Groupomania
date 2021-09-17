@@ -91,41 +91,63 @@ export default {
       name: null,
       errMessage: "",
       successMessage: "",
+      isFormValid: false,
     };
+  },
+  mounted(){
+      let that = this,
+          email_form = document.querySelector("#email"),
+          password_form = document.querySelector("#password");
+
+      email_form.addEventListener('input', () => {
+        if(!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email_form.value))) {
+          that.errMessage = "Veuillez entrer un email valide";
+        } else {
+          that.errMessage = "";
+          that.successMessage = "Email validé";
+          that.isFormValid = true;
+        }
+      });
+      
+      password_form.addEventListener('input', () => {
+        if(password_form.value === "" || password_form.value.length < 8){
+          that.successMessage = "";
+          that.errMessage = "Le mot de passe doit contenir à minima 8 caractères";
+        } else {
+          that.errMessage = "";
+          that.successMessage = "Mot de passe validé";
+          that.isFormValid = true;
+        }
+      });
   },
   methods: {
     registration() {
-      let form = document.querySelector("#form-validation"),
-        that = this,
-        email_form = document.querySelector("#email"),
-        password_form = document.querySelector("#password");
-
-      if (email_form === "" || email_form === null) that.errMessage = "Veuillez entrer un email valide";
-      if (password_form === "" || password_form === null) that.errMessage = "Veuillez entrer un password valide";
-
-      if (form.checkValidity(event) === false) {
+      let form = document.querySelector("#form-validation");
+      if(!this.isFormValid){
         event.preventDefault();
         event.stopPropagation();
         form.classList.add("notOk");
+        this.errMessage = "Un ou plusieur champs sont manquants";
       } else {
         form.classList.add("ok");
         axios
           .post("http://localhost:3000/api/user", { email: this.email, password: this.password, username: this.name })
           .then((response) => {
-            that.successMessage = response.data.message;
-            sessionStorage.setItem("jwt", response.data.token);
+            this.successMessage = response.data.message;
+            sessionStorage.setItem("token", response.data.token);
             sessionStorage.setItem("id", response.data.id);
             sessionStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
-              Authorization: "Bearer " + response.data.token,
+              Authorization: "Bearer " + response.data.token
             };
             window.location.href = "/forum";
           })
-          .catch((err) => { that.errMessage = err.response.data.message; });
+          .catch((err) => { this.errMessage = err.response.data.message; });
       }
     },
   },
 };
+
 </script>
 
 
