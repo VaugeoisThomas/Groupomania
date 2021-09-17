@@ -169,7 +169,7 @@ export default {
       axios
         .get(`http://localhost:3000/api/user/${this.$route.params.id}`)
         .then((response) => { this.profil = response.data.result; })
-        .catch((err) => { this.errMessage = err.response.data.error; });
+        .catch((err) => { this.errMessage = err.response.data.message; });
     },
 
     deleteAccount() {

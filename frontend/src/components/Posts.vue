@@ -6,13 +6,13 @@
           <p class="card-text mb-2 text-muted"> Message publié par <span class="link" @click="goProfil(post.User.id)" style="cursor: pointer" >{{ post.User.username }}</span> le {{ dateTranslation(post.createdAt) }} à {{ getTime(post.createdAt) }}</p>
         </div>
         <div class="card-body">
-          <p class="card-subtitle">{{ post.content }}</p>
+          <p class="card-subtitle">{{ post.content }}</p>      
         </div>
         <div class="card-footer">
           <div class="options">
             <button class="btn" @click="addComment = !addComment"><i class="fas fa-comment"></i></button>
             <button class="btn" @click="showComments = !showComments"> {{ post.commentsNbr }} commentaire(s)</button>
-            <button class="btn btn-danger" @click="deletePost(post.id)" v-if="id == post.UserId || post.User.isAdmin == 1" > Supprimer le message </button>
+            <button class="btn btn-danger" @click="deletePost(post.id)" v-if="isAdmin == 1 || post.UserId == id"> Supprimer le message </button>
           </div> 
           <div class="commentsByPost">
             <section v-show="addComment">
@@ -50,6 +50,7 @@ export default {
       showComments: false,
       PostId: '',
       id: '',
+      isAdmin: 0,
     };
   },
 
