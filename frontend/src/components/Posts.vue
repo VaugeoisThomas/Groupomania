@@ -12,7 +12,7 @@
           <div class="options">
             <button class="btn" @click="addComment = !addComment"><i class="fas fa-comment"></i></button>
             <button class="btn" @click="showComments = !showComments"> {{ post.commentsNbr }} commentaire(s)</button>
-            <button class="btn btn-danger" @click="deletePost(post.id)" v-if="id == post.UserId || isAdmin == 1" > Supprimer le message </button>
+            <button class="btn btn-danger" @click="deletePost(post.id)" v-if="id == post.UserId || post.User.isAdmin == 1" > Supprimer le message </button>
           </div> 
           <div class="commentsByPost">
             <section v-show="addComment">
@@ -23,7 +23,6 @@
               </form>
             </section>
             <section v-show="showComments">
-
               <div class="commentShown" v-for="comment in comments" :key="comment.id">
                 {{comment.content}}
               </div>
@@ -46,25 +45,12 @@ export default {
   data() {
     return {
       comments: [],
+      commentContent: '',
       addComment: false,
       showComments: false,
       PostId: '',
       id: '',
     };
-  },
-
-  created(){
-    axios
-      .get("http://localhost:3000/api/comment")
-      .then((response) => { 
-        this.comments = [...response.data.result];
-        if(this.posts.length > 0){
-          this.posts.forEach((post) => {
-            this.getTotalCommentsByPost(post)
-          });
-        } 
-      })
-      .catch((err) => { this.errMessage = err.response.data.message; });
   },
 
   mounted() {
@@ -103,7 +89,8 @@ export default {
 
     goProfil(id){
       this.$router.push({name:'Profil', params:{ id: id }})
-    }
+    },
+
   },
 };
 </script>

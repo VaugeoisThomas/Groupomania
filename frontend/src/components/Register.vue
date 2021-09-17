@@ -133,14 +133,11 @@ export default {
         axios
           .post("http://localhost:3000/api/user", { email: this.email, password: this.password, username: this.name })
           .then((response) => {
-            this.successMessage = response.data.message;
-            sessionStorage.setItem("token", response.data.token);
-            sessionStorage.setItem("id", response.data.id);
-            sessionStorage.setItem("isAdmin", response.data.isAdmin);
+            this.successMessage = "Vous allez être rediriger, veuillez maintenant vous connecter";
             response.headers = {
               Authorization: "Bearer " + response.data.token
             };
-            window.location.href = "/forum";
+            window.location.href = '/';
           })
           .catch((err) => { this.errMessage = err.response.data.message; });
       }

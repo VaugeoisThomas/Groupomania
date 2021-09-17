@@ -45,12 +45,12 @@ export default {
     axios
       .get("http://localhost:3000/api/post")
       .then((response) => { this.posts = response.data.result })
-      .catch((err) => { this.errMessage = err.response.data.message })
+      .catch((err) => { this.errMessage = err.response.data.message });
     
     axios
-      .get("http://localhost:3000/api/comment")
+      .get("http://localhost:3000/api/post")
       .then((response) => { 
-        this.comments = [...response.data.result];
+        this.posts = [...response.data.result];
         if(this.posts.length > 0){
           this.posts.forEach((post) => {
             this.getTotalCommentsByPost(post)
@@ -58,6 +58,7 @@ export default {
         } 
       })
       .catch((err) => { this.errMessage = err.response.data.message; });
+
   },
 
   mounted() {
@@ -76,6 +77,7 @@ export default {
         .then(() => { window.location.reload(); })
         .catch((err) => {this.errMessage = err.response.data.message;});
     },
+
     getTotalCommentsByPost(post){
       axios
         .get("http://localhost:3000/api/comment/" + post.id + "/post")
