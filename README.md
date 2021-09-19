@@ -37,4 +37,7 @@ You can modify your account, delete your account.
 
 ## Administration
 
+You can modify an user account, delete a account,
+You can also delete a post or a comment !
+
 Enjoy your visit.
