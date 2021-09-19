@@ -36,7 +36,7 @@ exports.getAllComments = (req, res) => {
     })
 };
 
-exports.getCommentForOneMessage = (req, res) => {
+exports.getNumberOfCommentByPost = (req, res) => {
     const {id} = req.params
      if(id) {
         db.Comments.count({
@@ -55,6 +55,20 @@ exports.getCommentForOneMessage = (req, res) => {
     }
 }
 
+exports.getCommentsByPost = (req, res) => {
+    const {id} = req.params
+    if(id){
+        db.Comments.findAll({
+            where: {
+                PostId : id
+            }
+        })
+        .then((result) => { return res.status(200).json(statusManagement.success(result))})
+        .catch((err) => {return res.status(500).json(statusManagement.error(err))})
+    } else {
+        return res.status(404).json(statusManagement.error("Aucun commentaire n'a été trouvé pour ce message !"));   
+    }
+}
 
 //DELETE A COMMENT
 exports.deleteComment = (req, res) => {

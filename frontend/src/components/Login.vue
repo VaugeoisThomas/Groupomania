@@ -75,38 +75,62 @@ export default {
       password: null,
       errMessage: "",
       successMessage: "",
+      isFormValid: false,
     };
   },
+
+  mounted() {
+    let that = this,
+        passwordForm = document.querySelector('#password'),
+        emailForm = document.querySelector('#email');
+
+    emailForm.addEventListener('input', () => {
+      if(!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailForm.value))) {
+        that.errMessage = "Veuillez entrer un email valide";
+      } else {
+        that.errMessage = "";
+        that.successMessage = "Email validé";
+        that.isFormValid = true;
+      }
+    });
+      
+    passwordForm.addEventListener('input', () => {
+      if(passwordForm.value === "" || passwordForm.value.length < 8){
+        that.successMessage = "";
+        that.errMessage = "Le mot de passe doit contenir à minima 8 caractères";
+      } else {
+        that.errMessage = "";
+        that.successMessage = "Mot de passe validé";
+        that.isFormValid = true;
+      }
+    });
+
+  },
+
   methods: {
     login() {
-      var that = this,
-        form = document.querySelector("#form-validation"),
-        emailForm = document.querySelector("#email"),
-        passwordForm = document.querySelector("#password");
+      let form = document.querySelector("#form-validation");
 
-      if (emailForm === "" || emailForm === null) that.errMessage = "Veuillez entrer un email valide";
-      if (passwordForm === "" || passwordForm === null) that.errMessage = "Veuillez entrer un password valide";
-
-      if (form.checkValidity(event) === false) {
+      if(!this.isFormValid) {
         event.preventDefault();
         event.stopPropagation();
-        form.classList.add("notOk");
+        this.errMessage = "Un ou plusieur champs sont invalides";
       } else {
         form.classList.add("ok");
         axios
           .post("http://localhost:3000/api/user/login", { email: this.email, password: this.password })
           .then((response) => {
-            that.successMessage = response.data.message;
+            this.successMessage = "Connexion réussie";
             sessionStorage.setItem("jwt", response.data.token);
             sessionStorage.setItem("id", response.data.id);
             sessionStorage.setItem("isAdmin", response.data.isAdmin);
             response.headers = {
               Authorization: "Bearer " + response.data.token,
             };
-            window.location.href = "/forum";
-            console.log(response);
+            setTimeout(() => {window.location.href = "/forum"; }, 2000);
+
           })
-          .catch((err) => { that.errMessage = err.response.data.message; });
+          .catch((err) => { this.errMessage = err.response.data.message; });
       }
     },
   },
@@ -141,13 +165,5 @@ export default {
 
 .card-title {
   text-align: center;
-}
-
-.ok {
-  border: 1px solid green;
-}
-
-.notOk {
-  border: 1px solid red;
 }
 </style>

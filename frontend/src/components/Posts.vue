@@ -18,11 +18,12 @@
             <section v-show="addComment">
               <form @submit.prevent="postComment(post.id)" method="post">
                 <label :for="post.id" class="ml-1"></label>
-                <input v-model="commentContent" type="text" name="comment" :id="post.id" class="form-control" placeholder="Ajouter un commentaire" required>
+                <input v-model="content" type="text" name="comment" :id="post.id" class="form-control" placeholder="Ajouter un commentaire" required>
                 <button type="submit" class="btn btn-outline-info">Publier</button>
               </form>
             </section>
             <section v-show="showComments">
+              {{comments.content}}
               <div class="commentShown" v-for="comment in comments" :key="comment.id">
                 {{comment.content}}
               </div>
@@ -45,12 +46,12 @@ export default {
   data() {
     return {
       comments: [],
-      commentContent: '',
       addComment: false,
       showComments: false,
       PostId: '',
       id: '',
       isAdmin: 0,
+      commentContent: ''
     };
   },
 

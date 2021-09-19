@@ -38,13 +38,13 @@
             </div>
             <div class="col-sm-12">
               <div class="form-group">
-                <label for="user_name">Pseudo</label>
+                <label for="username">Pseudo</label>
                 <input
                   v-model="name"
                   type="text"
                   class="form-control"
-                  id="user_name"
-                  name="user_name"
+                  id="username"
+                  name="username"
                   placeholder="Votre pseudo"
                   required
                 />
@@ -96,11 +96,12 @@ export default {
   },
   mounted(){
       let that = this,
-          email_form = document.querySelector("#email"),
-          password_form = document.querySelector("#password");
+          emailForm = document.querySelector("#email"),
+          passwordForm = document.querySelector("#password"),
+          usernameForm = document.querySelector('#username');
 
-      email_form.addEventListener('input', () => {
-        if(!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email_form.value))) {
+      emailForm.addEventListener('input', () => {
+        if(!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailForm.value))) {
           that.errMessage = "Veuillez entrer un email valide";
         } else {
           that.errMessage = "";
@@ -109,8 +110,8 @@ export default {
         }
       });
       
-      password_form.addEventListener('input', () => {
-        if(password_form.value === "" || password_form.value.length < 8){
+      passwordForm.addEventListener('input', () => {
+        if(passwordForm.value === "" || passwordForm.value.length < 8){
           that.successMessage = "";
           that.errMessage = "Le mot de passe doit contenir à minima 8 caractères";
         } else {
@@ -119,17 +120,25 @@ export default {
           that.isFormValid = true;
         }
       });
+
+      usernameForm.addEventListener('input', () => {
+        if(usernameForm === '' || usernameForm.value.length < 3){
+          that.successMessage = "";
+          that.errMessage = "Le username doit avoir au moins 3 caractères";
+        } else {
+          that.errMessage = "";
+          that.successMessage = "Username correct";
+          that.isFormValid = true;
+        }
+      })
   },
   methods: {
     registration() {
-      let form = document.querySelector("#form-validation");
       if(!this.isFormValid){
         event.preventDefault();
         event.stopPropagation();
-        form.classList.add("notOk");
         this.errMessage = "Un ou plusieur champs sont manquants";
       } else {
-        form.classList.add("ok");
         axios
           .post("http://localhost:3000/api/user", { email: this.email, password: this.password, username: this.name })
           .then((response) => {
@@ -137,7 +146,8 @@ export default {
             response.headers = {
               Authorization: "Bearer " + response.data.token
             };
-            window.location.href = '/';
+            setTimeout(() => { window.location.href = '/'}, 2000);
+
           })
           .catch((err) => { this.errMessage = err.response.data.message; });
       }
@@ -178,11 +188,4 @@ export default {
   text-align: center;
 }
 
-.ok {
-  border: 1px solid green;
-}
-
-.notOk {
-  border: 1px solid red;
-}
 </style>
