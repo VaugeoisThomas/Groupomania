@@ -7,10 +7,11 @@ Welcome to groupomania repository !
 1. Clone the repository
 2. Execute the following command on your terminal `npm install`  
 *It will install all depencies that you need to properly launch the differents servers.*
-3. Then you should execute the SQL file to make sure that you have the right database.  
-*(File is located in **back-end/sql/groupomania.sql**)*
+3. Make sure you've sequelize-cli installed. If it's done, you could go to step 4
+4. Then you should migrate differents migrations like this : `npx sequelize db:migrate`
+5. Now, you've to run the following commands: `npx sequelize-cli db:seed:all`
 
-At this point you installed all the different files you could execute following command lines.
+At this point you've installed all the different files you could execute following command lines.
 
 ## Launching the differents servers
 
@@ -30,7 +31,10 @@ You may have a strong password :
 * contains one capital letter
 * have two numbers   
 
-You can write a message.
+You can write a post, write a comment on one post.
+You can delete your comment or post
 You can modify your account, delete your account.
+
+## Administration
 
 Enjoy your visit.

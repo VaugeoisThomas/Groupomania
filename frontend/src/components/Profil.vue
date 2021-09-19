@@ -16,7 +16,7 @@
             <div class="card-text">
               <p>
                 Admin :
-                <span v-if="isAdmin == 1 || profil.isAdmin == 1">Oui</span>
+                <span v-if="profil.isAdmin == 1">Oui</span>
                 <span v-else>Non </span>
               </p>
             </div>
@@ -105,12 +105,12 @@
               </div>
               <div class="col-sm-12">
                 <div class="form-group">
-                  <label for="name">Pseudo</label>
+                  <label for="username">Pseudo</label>
                   <input
                     type="text"
                     class="form-control"
-                    id="name"
-                    name="name"
+                    id="username"
+                    name="username"
                     placeholder="Votre pseudo"
                     v-model="name"
                     required
@@ -150,9 +150,50 @@ export default {
       deleteProfil: false,
       modifyProfil: false,
       errMessage: "",
-      successMessage: ""
+      successMessage: "",
+      isFormValid : false,
     };
   },
+
+  mounted () {
+      let that = this,
+        emailForm = document.querySelector("#email"),
+        passwordForm = document.querySelector("#password"),
+        usernameForm = document.querySelector('#username');
+
+      emailForm.addEventListener('input', () => {
+        if(!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailForm.value))) {
+          that.errMessage = "Veuillez entrer un email valide";
+        } else {
+          that.errMessage = "";
+          that.successMessage = "Email validé";
+          that.isFormValid = true;
+        }
+      });
+      
+      passwordForm.addEventListener('input', () => {
+        if(passwordForm.value === "" || passwordForm.value.length < 8){
+          that.successMessage = "";
+          that.errMessage = "Le mot de passe doit contenir à minima 8 caractères";
+        } else {
+          that.errMessage = "";
+          that.successMessage = "Mot de passe validé";
+          that.isFormValid = true;
+        }
+      });
+
+      usernameForm.addEventListener('input', () => {
+        if(usernameForm === '' || usernameForm.value.length < 3){
+          that.successMessage = "";
+          that.errMessage = "Le username doit avoir au moins 3 caractères";
+        } else {
+          that.errMessage = "";
+          that.successMessage = "Username correct";
+          that.isFormValid = true;
+        }
+      })
+  },
+
   beforeRouteUpdate(to, from, next) { 
     this.findUser(to.params.id); 
     next();
@@ -184,19 +225,21 @@ export default {
         })
         .catch((err) => { this.errMessage = err.response.data.error; });
     },
-    modifyAccount(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    modifyAccount() {
+      if (!this.isFormValid) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.errMessage = "Un ou plusieur champs sont invalides";
+      } else {
+        const configuration = {
+          headers: { Authorization: `Bearer ` + this.token}
+        };
+  
+        axios
+          .put("http://localhost:3000/api/user/" + this.id + "/updateProfil", {email: this.email, password: this.password, username: this.name}, configuration)
+          .then(() => { setTimeout(() => {window.location.reload(); }, 2000)})
+          .catch((err) => { this.errMessage = err.response.data.error; });
       }
-      const configuration = {
-        headers: { Authorization: `Bearer ` + this.token}
-      };
-
-      axios
-        .put("http://localhost:3000/api/user/" + this.id + "/updateProfil", {email: this.email, password: this.password, username: this.name}, configuration)
-        .then(() => { window.location.reload(); })
-        .catch((err) => { this.errMessage = err.response.data.error; });
     },
   },
 };
