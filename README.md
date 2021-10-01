@@ -5,7 +5,7 @@ Welcome to groupomania repository !
 ## Installation
 
 1. Clone the repository
-2. Execute the following command on your terminal `npm install`  
+2. Execute the following command on your terminal `npm install` from backend and frontend folder
 *It will install all depencies that you need to properly launch the differents servers.*
 3. Make sure you've sequelize-cli installed. If it's done, you could go to step 4
 4. Then you should migrate differents migrations like this : `npx sequelize db:migrate`
@@ -17,14 +17,18 @@ At this point you've installed all the different files you could execute followi
 
 1. Open two different terminal  
   * One for front-end  
-  * Other one for back-end  
-2. On front-end terminal you have to execute `npm run server`
+  * Other one for back-end
+2. On front-end terminal you have to execute `npm run serve`
 3. On back-end terminal you have to execute  `nodemon server.js`
 4. Finally, open your browser and you should go to [localhost](http://localhost:8080/)
 
 ## On the website
 
-You could create an account to testing fonctionnalities.
+You can login with:
+- Email: Admin@groupomania.com
+- Password: Password09
+
+But you can also create another account
 
 You may have a strong password :
 * minimum 8 characteres
