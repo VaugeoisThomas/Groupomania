@@ -23,8 +23,7 @@
               </form>
             </section>
             <section v-show="showComments">
-              {{comments.content}}
-              <div class="commentShown" v-for="comment in comments" :key="comment.id">
+              <div class="commentShown" v-for="comment in post.commentConten" :key="comment.id">
                 {{comment.content}}
               </div>
             </section>
