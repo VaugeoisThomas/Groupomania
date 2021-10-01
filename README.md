@@ -8,8 +8,9 @@ Welcome to groupomania repository !
 2. Execute the following command on your terminal `npm install` from backend and frontend folder
 *It will install all depencies that you need to properly launch the differents servers.*
 3. Make sure you've sequelize-cli installed. If it's done, you could go to step 4
-4. Then you should migrate differents migrations like this : `npx sequelize db:migrate`
-5. Now, you've to run the following commands: `npx sequelize-cli db:seed:all`
+4. Execute the following command to create the database: `npx sequelize db:create`
+5. Then you should migrate differents migrations like this : `npx sequelize db:migrate`
+6. Now, you've to run the following commands: `npx sequelize-cli db:seed:all`
 
 At this point you've installed all the different files you could execute following command lines.
 
